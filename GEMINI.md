@@ -30,7 +30,9 @@ Every generated thumbnail must match the layout, character rig, and typography s
 
 - **Procedural Canvas2D Only:** All video body frames are built with the procedural engine (`.agents/skills/crayon-capital-explainer/engine/`). Never use AI video stills with Ken Burns zooms.
 - **Clean Stable Lines (No Boil):** `CC.BOIL = false` is permanent. No line jitter or boiling.
-- **Frame Rate & Pacing:** 1920 × 1080 @ 30 fps. Shots last 1.3 to 5.0 seconds, cut on every spoken clause of the narration.
+- **Frame Rate & Pacing:** 1920 × 1080 @ 30 fps. Shots last 1.2 to 2.8 seconds maximum (matching Crayon Capital's *The Wolf of Wall Street* reference). Every spoken paragraph must contain multiple visual cutaways and scene switches.
+- **Dynamic Camera Zooms & Punch-ins:** Use `CC.cam.punch()`, `CC.cam.push()`, and `CC.cam.zoom()` on key words, dramatic moments, and emotional character reactions.
+- **Rich Physical Props:** Never rely on static talking characters alone. Incorporate tangible props (Boeing 707 cargo planes, ringing phones, bank vaults, stock certificates, burning cash, newspapers, molten silver pots, handcuffs, and courtroom gavels).
 - **Dynamic Character Acting:** Characters never just stand idle. Every clause must be physically acted out (slide-ins, handovers, stamps, chart draw-ons, coin jars, reaction sweat/anger FX).
 - **Audio Standards:**
   - Narration: High-quality conversational voiceover (or neural Edge-TTS `en-US-GuyNeural`).

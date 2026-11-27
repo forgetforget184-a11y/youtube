@@ -11,6 +11,10 @@ frames/
 work_mix.wav
 work_audio_norm.wav
 
+# Video files
+*.mp4
+*.mkv
+
 # OS / Editor files
 .DS_Store
 Thumbs.db

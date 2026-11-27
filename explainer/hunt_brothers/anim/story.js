@@ -1,6 +1,6 @@
 /* ============================================================================
  * story.js — "The Billionaires Who Cornered the Silver Market"
- * Crayon Capital procedural Canvas2D animated video
+ * Crayon Capital procedural Canvas2D animated video — Ultra-Dynamic V2
  * ==========================================================================*/
 (function () {
   const TM = window.TM, CC = TM.CC, P = CC.P, PAL = CC.PAL, INK = CC.INK, W = TM.W, H = TM.H;
@@ -11,1902 +11,1859 @@
   const shots = [];
   const S = (a, b, draw, o) => shots.push(Object.assign({ start: a, end: b, draw }, o || {}));
 
-  // Helper characters
+  // Actors
   const bunker = (ctx, s, base, track) => CC.actor(ctx, s, 'tycoon', Object.assign({ s: 1.5, expr: 'neutral' }, base), track);
   const herbert = (ctx, s, base, track) => CC.actor(ctx, s, 'banker', Object.assign({ s: 1.45, expr: 'neutral' }, base), track);
   const hl_hunt = (ctx, s, base, track) => CC.actor(ctx, s, 'tycoon', Object.assign({ s: 1.55, expr: 'smug', mustache: 'walrus' }, base), track);
+  const analyst = (ctx, s, base, track) => CC.actor(ctx, s, 'analyst', Object.assign({ s: 1.4, expr: 'shock' }, base), track);
+  const reporter = (ctx, s, base, track) => CC.actor(ctx, s, 'reporter', Object.assign({ s: 1.4, expr: 'neutral' }, base), track);
+  const judge = (ctx, s, base, track) => CC.actor(ctx, s, 'judge', Object.assign({ s: 1.45, expr: 'angry' }, base), track);
 
-  /* 1 ─ 0.21–6.93  Hook: 1979 Wall Street entrance */
-  S(0.21, 6.93, (ctx, s) => {
+  S(0.21, 3.7, (ctx, s) => {
     CC.bg(ctx, PAL.sky, { floor: FL, floorCol: PAL.tanDk });
-    CC.city(ctx, FL, PAL.slate, { xs: [120, 360, 1500, 1720] });
-    P.bank(ctx, 1280, FL, { s: 1.1, label: 'WALL ST' });
-    bunker(ctx, s, { x: 620, y: FL, expr: 'smug' }, [
-      { at: 0, slideIn: 'left', dur: 0.7 }, { at: 1.5, pose: 'point', expr: 'confident' }
-    ]);
-    herbert(ctx, s, { x: 420, y: FL, expr: 'happy' }, [
-      { at: 0.2, slideIn: 'left', dur: 0.7 }, { at: 2.0, pose: 'thumbsUp' }
-    ]);
-    CC.callout(ctx, '1979', 960, 220, s.lt, 0.5, { size: 80, rot: -0.03 });
-  });
-
-  /* 2 ─ 6.93–11.98  Burning dollar bill / bankruptcy */
-  S(6.93, 11.98, (ctx, s) => {
-    CC.bg(ctx, PAL.rose, { floor: FL, floorCol: PAL.greyDk });
-    CC.obj(ctx, s, { x: 960, y: 460, at: 0.3, in: 'pop' }, c => {
-      P.bill(c, 0, 0, { s: 2.2, label: '$100' });
-      CC.stamp(c, s, 'WORTHLESS', 0, 0, 0.8, { col: PAL.red, size: 90 });
-    });
-    bunker(ctx, s, { x: 450, y: FL, pose: 'shrug', expr: 'disappointed' }, [
-      { at: 0.8, expr: 'shock', fx: 'sweat' }
-    ]);
-  });
-
-  /* 3 ─ 11.98–18.62  Silver bullion drop */
-  S(11.98, 18.62, (ctx, s) => {
+    CC.city(ctx, FL, PAL.slate, { xs: [150, 380, 1520, 1750] });
+    P.bank(ctx, 1280, FL, { s: 1.15, label: 'WALL ST' });
+    bunker(ctx, s, { x: 640, y: FL, expr: 'smug' }, [{ at: 0, slideIn: 'left', dur: 0.5 }, { at: 0.8, pose: 'point', expr: 'confident' }]);
+    herbert(ctx, s, { x: 440, y: FL, expr: 'happy' }, [{ at: 0.15, slideIn: 'left', dur: 0.5 }, { at: 1.0, pose: 'thumbsUp' }]);
+    CC.callout(ctx, '1979', 960, 220, s.lt, 0.3, { size: 85, rot: -0.02 });
+  }, { cam: CC.cam.push(960, 480, 1.18, 0, 3.49), sfx: [[0.1, 'whoosh']] });
+  S(3.7, 6.93, (ctx, s) => {
     CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.obj(ctx, s, { x: 960, y: FL, at: 0.2, in: 'drop', from: 400 }, c => {
-      CC.rect(c, -200, -120, 400, 120, PAL.grey, 8, 12);
-      CC.text(c, 'SILVER .999', 0, -60, 48, PAL.white, { font: 'PMarker' });
+    P.skyscraper(ctx, 960, FL, { w: 320, h: 540, col: PAL.slateDk, sign: 'EXCHANGE' });
+    bunker(ctx, s, { x: 960, y: FL, s: 1.8, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp', expr: 'grin' }]);
+    CC.stamp(ctx, s, 'THE MASTERPLAN', 960, 260, 0.3, { col: PAL.moneyDk, size: 88 });
+  }, { cam: CC.cam.punch(960, 480, 1.3, 0.15), sfx: [[0.15, 'stamp']] });
+  S(6.93, 9.56, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL, floorCol: PAL.greyDk });
+    CC.obj(ctx, s, { x: 960, y: 460, at: 0.2, in: 'pop' }, c => {
+      P.bill(c, 0, 0, { s: 2.2, label: '$100' });
+      CC.stamp(c, s, 'WORTHLESS', 0, 0, 0.4, { col: PAL.red, size: 95 });
     });
-    bunker(ctx, s, { x: 1450, y: FL, expr: 'greedy' }, [
-      { at: 0.4, pose: 'point', expr: 'smug' }
-    ]);
-    CC.stamp(ctx, s, 'REAL ASSET', 960, 360, 0.6, { col: PAL.moneyDk, size: 85 });
-  });
-
-  /* 4 ─ 18.62–20.05  Clause: "But they did not just buy a little bit...." */
+    bunker(ctx, s, { x: 420, y: FL, pose: 'shrug', expr: 'disappointed' }, [{ at: 0.6, expr: 'shock', fx: 'sweat' }]);
+  }, { cam: CC.cam.punch(960, 460, 1.25, 0.2), sfx: [[0.2, 'stamp']] });
+  S(9.56, 11.98, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.rain(ctx, s, 'bill', { n: 12, speed: 450 });
+    analyst(ctx, s, { x: 960, y: FL, s: 1.75, expr: 'shock' }, [{ at: 0.2, pose: 'face', fx: 'sweat' }]);
+    CC.callout(ctx, 'BANKRUPTCY', 960, 200, s.lt, 0.2, { size: 90, col: PAL.red });
+  }, { cam: CC.cam.zoom(1.1), sfx: [[0.1, 'whoosh']] });
+  S(11.98, 15.43, (ctx, s) => {
+    CC.bg(ctx, PAL.slateDk, { floor: FL });
+    CC.obj(ctx, s, { x: 960, y: FL, at: 0.1, in: 'drop', from: 400 }, c => {
+      CC.rect(c, -220, -140, 440, 140, PAL.grey, 8, 14);
+      CC.text(c, 'SILVER .999', 0, -70, 52, PAL.white, { font: 'PMarker' });
+    });
+    bunker(ctx, s, { x: 1450, y: FL, expr: 'greedy' }, [{ at: 0.3, pose: 'point', expr: 'smug' }]);
+  }, { cam: CC.cam.punch(960, FL - 70, 1.25, 0.1), sfx: [[0.1, 'thud']] });
+  S(15.43, 18.62, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    P.coinStack(ctx, 720, FL, { n: 7, r: 60 });
+    P.coinStack(ctx, 1200, FL, { n: 7, r: 60 });
+    bunker(ctx, s, { x: 960, y: FL, s: 1.7, expr: 'joy' }, [{ at: 0.2, pose: 'cheer' }]);
+    CC.stamp(ctx, s, 'REAL TANGIBLE ASSET', 960, 240, 0.3, { col: PAL.gold, size: 75 });
+  }, { cam: CC.cam.push(960, 480, 1.2, 0, 3.19), sfx: [[0.2, 'clink']] });
   S(18.62, 20.05, (ctx, s) => {
     CC.bg(ctx, PAL.sage, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BUT THEY DID NOT JUST BUY", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 5 ─ 20.05–28.76  Globe + 1/3 silver */
-  S(20.05, 28.76, (ctx, s) => {
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUT THEY DID NOT JUST BUY A LI", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.43), sfx: [[0.15, 'whoosh']] });
+  S(20.05, 24.58, (ctx, s) => {
     CC.bg(ctx, PAL.slateDk, { floor: FL, floorCol: PAL.charcoal });
-    CC.globeSpin(ctx, s, 960, 500, { r: 240 });
-    CC.callout(ctx, '1/3 OF ALL SILVER', 960, 180, s.lt, 0.4, { size: 88, rot: 0.02 });
-    bunker(ctx, s, { x: 420, y: FL, expr: 'confident' }, [
-      { at: 0.2, pose: 'cheer', expr: 'joy' }
-    ]);
-  });
-
-  /* 6 ─ 28.76–30.89  Rocket chart +700% */
+    CC.globeSpin(ctx, s, 960, 500, { r: 250 });
+    CC.callout(ctx, '1/3 OF ALL SILVER', 960, 180, s.lt, 0.2, { size: 92, rot: 0.02 });
+  }, { cam: CC.cam.zoom(1.12), sfx: [[0.1, 'whoosh']] });
+  S(24.58, 28.76, (ctx, s) => {
+    CC.bg(ctx, PAL.tanDk, { floor: FL });
+    P.jar(ctx, 960, FL, { w: 320, h: 420, fill: 0.33, label: '1/3 OF EARTH' });
+    bunker(ctx, s, { x: 480, y: FL, s: 1.6, expr: 'smug' }, [{ at: 0.2, pose: 'point' }]);
+    herbert(ctx, s, { x: 1440, y: FL, s: 1.6, expr: 'happy' }, [{ at: 0.3, pose: 'thumbsUp' }]);
+  }, { cam: CC.cam.punch(960, 480, 1.25, 0.2), sfx: [[0.2, 'pop']] });
   S(28.76, 30.89, (ctx, s) => {
     CC.bg(ctx, PAL.beige, { floor: FL });
-    P.lineChart(ctx, 480, 260, 960, 480, [[0, 0.1], [0.3, 0.18], [0.6, 0.45], [0.9, 0.95]], CC.prog(CC.q(s.lt), 0.2, 1.2), { col: PAL.green, lw: 9 });
-    CC.stamp(ctx, s, '+700%', 1200, 380, 0.7, { col: PAL.red, size: 110 });
-    CC.actor(ctx, s, 'analyst', { x: 340, y: FL, pose: 'think', expr: 'shock' }, [
-      { at: 0.5, pose: 'face', fx: 'sweat' }
-    ]);
-  });
-
-  /* 7 ─ 30.89–36.43  Melting antique silver */
-  S(30.89, 36.43, (ctx, s) => {
+    P.lineChart(ctx, 450, 250, 1020, 500, [[0, 0.1], [0.3, 0.2], [0.6, 0.5], [0.9, 0.98]], CC.prog(CC.q(s.lt), 0.1, 0.8), { col: PAL.greenDk, lw: 10 });
+    CC.stamp(ctx, s, '+700%', 1250, 360, 0.5, { col: PAL.red, size: 120 });
+  }, { cam: CC.cam.punch(1250, 360, 1.35, 0.5), sfx: [[0.5, 'stamp']] });
+  S(30.89, 33.77, (ctx, s) => {
     CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'grandma', { x: 620, y: FL, expr: 'shock' }, [
-      { at: 0, slideIn: 'left', dur: 0.5 }, { at: 0.8, pose: 'give', expr: 'happy' }
-    ]);
-    CC.actor(ctx, s, 'worker', { x: 1300, y: FL, pose: 'hold', expr: 'neutral' }, [
-      { at: 0.6, pose: 'carry' }
-    ]);
-    CC.obj(ctx, s, { x: 960, y: FL, at: 0.2, in: 'pop' }, c => {
-      P.jar(c, 0, 0, { w: 260, h: 320, fill: 0.8, label: 'MELTING' });
-    });
-  });
-
-  /* 8 ─ 36.43–40.49  Clause: "And then, just when they thought they ow..." */
-  S(36.43, 40.49, (ctx, s) => {
+    CC.actor(ctx, s, 'grandma', { x: 620, y: FL, expr: 'shock' }, [{ at: 0, slideIn: 'left', dur: 0.4 }, { at: 0.5, pose: 'give', expr: 'happy' }]);
+    CC.actor(ctx, s, 'worker', { x: 1300, y: FL, pose: 'hold', expr: 'neutral' }, [{ at: 0.4, pose: 'carry' }]);
+    CC.obj(ctx, s, { x: 960, y: FL, at: 0.2, in: 'pop' }, c => P.jar(c, 0, 0, { w: 280, h: 340, fill: 0.85, label: 'MELTING' }));
+  }, { cam: CC.cam.punch(960, 480, 1.2, 0.2), sfx: [[0.2, 'pop']] });
+  S(33.77, 36.43, (ctx, s) => {
+    CC.bg(ctx, PAL.slateDk, { floor: FL });
+    CC.callout(ctx, 'STREET CORNER MELTDOWNS', 960, 220, s.lt, 0.2, { size: 76 });
+    P.coinStack(ctx, 960, FL, { n: 8, r: 65 });
+  }, { cam: CC.cam.zoom(1.1), sfx: [[0.1, 'clink']] });
+  S(36.43, 38.54, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "AND THEN, JUST WHEN THEY THOUG", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.11), sfx: [[0.15, 'whoosh']] });
+  S(38.54, 40.49, (ctx, s) => {
     CC.bg(ctx, PAL.sky, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "AND THEN, JUST WHEN THEY ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 9 ─ 40.49–42.83  The Rule Change slam */
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "AND THEN, JUST WHEN THEY THOUG", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
   S(40.49, 42.83, (ctx, s) => {
-    CC.spot(ctx, 960, FL, { w: 500 });
-    CC.stamp(ctx, s, 'RULE CHANGE', 960, 480, 0.3, { col: PAL.red, size: 85 });
-    bunker(ctx, s, { x: 450, y: FL, expr: 'shock' }, [
-      { at: 0.3, collapse: 'left', fx: 'sweat' }
-    ]);
-  }, { sfx: [[0.3, 'stamp']] });
-
-  /* 10 ─ 42.83–46.09  The Rule Change slam */
-  S(42.83, 46.09, (ctx, s) => {
-    CC.spot(ctx, 960, FL, { w: 500 });
-    CC.stamp(ctx, s, 'RULE CHANGE', 960, 480, 0.3, { col: PAL.red, size: 85 });
-    bunker(ctx, s, { x: 450, y: FL, expr: 'shock' }, [
-      { at: 0.3, collapse: 'left', fx: 'sweat' }
-    ]);
-  }, { sfx: [[0.3, 'stamp']] });
-
-  /* 11 ─ 46.09–50.57  Chapter Card: The Gambler's Sons */
-  S(46.09, 50.57, (ctx, s) => {
-    CC.chapter(ctx, s, "The Gambler's Sons", { kicker: "CHAPTER ONE", at: 0.1, dur: 1.20 });
-  }, { fadeIn: 0.15, fadeOut: 0.15 });
-
-  /* 12 ─ 50.57–56.21  Clause: "His name was Haroldson Lafayette Hunt, b..." */
-  S(50.57, 56.21, (ctx, s) => {
-    CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "HIS NAME WAS HAROLDSON LA", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 13 ─ 56.21–59.13  Clause: "In the nineteen thirties, H.L...." */
-  S(56.21, 59.13, (ctx, s) => {
-    CC.bg(ctx, PAL.slate, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "IN THE NINETEEN THIRTIES,", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 14 ─ 59.13–61.39  Clause: "was quite literally the richest private ..." */
-  S(59.13, 61.39, (ctx, s) => {
-    CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "WAS QUITE LITERALLY THE R", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 15 ─ 61.39–66.77  H.L. Hunt poker game */
-  S(61.39, 66.77, (ctx, s) => {
-    CC.bg(ctx, PAL.wood, { floor: FL, floorCol: PAL.brown });
-    P.desk(ctx, 960, FL + 20, { s: 1.4 });
-    hl_hunt(ctx, s, { x: 680, y: FL, pose: 'hold', expr: 'smug' }, [
-      { at: 0.5, pose: 'present', expr: 'grin' }
-    ]);
-    CC.actor(ctx, s, 'crook', { x: 1240, y: FL, pose: 'face', expr: 'shock', look: -0.6 }, [
-      { at: 0.8, pose: 'shrug', fx: 'sweat' }
-    ]);
-    CC.callout(ctx, 'OIL LEASE', 960, 360, s.lt, 0.6, { size: 68 });
-  });
-
-  /* 16 ─ 66.77–72.18  H.L. Hunt poker game */
-  S(66.77, 72.18, (ctx, s) => {
-    CC.bg(ctx, PAL.wood, { floor: FL, floorCol: PAL.brown });
-    P.desk(ctx, 960, FL + 20, { s: 1.4 });
-    hl_hunt(ctx, s, { x: 680, y: FL, pose: 'hold', expr: 'smug' }, [
-      { at: 0.5, pose: 'present', expr: 'grin' }
-    ]);
-    CC.actor(ctx, s, 'crook', { x: 1240, y: FL, pose: 'face', expr: 'shock', look: -0.6 }, [
-      { at: 0.8, pose: 'shrug', fx: 'sweat' }
-    ]);
-    CC.callout(ctx, 'OIL LEASE', 960, 360, s.lt, 0.6, { size: 68 });
-  });
-
-  /* 17 ─ 72.18–80.74  East Texas oil gusher */
-  S(72.18, 80.74, (ctx, s) => {
-    CC.bg(ctx, PAL.sky, { floor: FL, floorCol: PAL.tanDk });
-    P.mountain(ctx, 960, FL, { w: 600, h: 400, col: PAL.charcoal });
-    hl_hunt(ctx, s, { x: 480, y: FL, pose: 'pointUp', expr: 'joy' }, [
-      { at: 0.4, pose: 'cheer' }
-    ]);
-    CC.coinJar(ctx, s, { x: 1400, y: FL, w: 240, h: 360, t0: 0.2, n: 5, fill0: 0.1, fill1: 0.95, label: 'OIL' });
-    CC.word(ctx, 'BILLIONS', 960, 200, 96, PAL.moneyDk, s.lt, 0.5);
-  });
-
-  /* 18 ─ 80.74–82.41  Clause: "Hunt was brilliant, completely eccentric..." */
-  S(80.74, 82.41, (ctx, s) => {
-    CC.bg(ctx, PAL.sage, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "HUNT WAS BRILLIANT, COMPL", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 19 ─ 82.41–86.12  Clause: "He carried his lunch in a brown paper ba..." */
-  S(82.41, 86.12, (ctx, s) => {
-    CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "HE CARRIED HIS LUNCH IN A", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 20 ─ 86.12–93.86  Clause: "and firmly believed that paper money was..." */
-  S(86.12, 93.86, (ctx, s) => {
-    CC.bg(ctx, PAL.slate, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "AND FIRMLY BELIEVED THAT ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 21 ─ 93.86–96.95  Clause: "When he died in nineteen seventy-four, h..." */
-  S(93.86, 96.95, (ctx, s) => {
-    CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'present', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "WHEN HE DIED IN NINETEEN ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 22 ─ 96.95–102.71  Clause: "Standing right at the head of the table ..." */
-  S(96.95, 102.71, (ctx, s) => {
-    CC.bg(ctx, PAL.sky, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "STANDING RIGHT AT THE HEA", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 23 ─ 102.71–106.73  Clause: "Nelson Bunker Hunt, alongside his younge..." */
-  S(102.71, 106.73, (ctx, s) => {
+    CC.spot(ctx, 960, FL, { w: 550 });
+    CC.stamp(ctx, s, 'RULE CHANGE', 960, 460, 0.2, { col: PAL.red, size: 95 });
+    bunker(ctx, s, { x: 450, y: FL, expr: 'shock' }, [{ at: 0.3, collapse: 'left', fx: 'sweat' }]);
+  }, { cam: CC.cam.punch(960, 460, 1.35, 0.2), sfx: [[0.2, 'stamp']] });
+  S(42.83, 44.53, (ctx, s) => {
+    CC.spot(ctx, 960, FL, { w: 550 });
+    CC.stamp(ctx, s, 'RULE CHANGE', 960, 460, 0.2, { col: PAL.red, size: 95 });
+    bunker(ctx, s, { x: 450, y: FL, expr: 'shock' }, [{ at: 0.3, collapse: 'left', fx: 'sweat' }]);
+  }, { cam: CC.cam.punch(960, 460, 1.35, 0.2), sfx: [[0.2, 'stamp']] });
+  S(44.53, 46.09, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    judge(ctx, s, { x: 960, y: FL, s: 1.8, expr: 'angry' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, 'THE HOUSE WINS', 960, 240, 0.3, { col: PAL.white, size: 85 });
+  }, { cam: CC.cam.punch(960, 240, 1.25, 0.3), sfx: [[0.3, 'thud']] });
+  /* CH 1 */ S(46.09, 50.57, (ctx, s) => CC.chapter(ctx, s, "The Gambler's Sons", { kicker: "CHAPTER ONE", at: 0.1, dur: 1.0 }), { cam: CC.cam.punch(960, 540, 1.1, 0.1), sfx: [[0.1, 'thud']] });
+  S(50.57, 53.5, (ctx, s) => {
     CC.bg(ctx, PAL.beige, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "NELSON BUNKER HUNT, ALONG", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 24 ─ 106.73–116.72  Clause: "Bunker Hunt was a massive, quiet man who..." */
-  S(106.73, 116.72, (ctx, s) => {
-    CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BUNKER HUNT WAS A MASSIVE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 25 ─ 116.72–121.04  Clause: "But underneath that calm Texas drawl was..." */
-  S(116.72, 121.04, (ctx, s) => {
-    CC.bg(ctx, PAL.sage, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BUT UNDERNEATH THAT CALM ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 26 ─ 121.04–126.34  Clause: "Bunker inherited a personal fortune in o..." */
-  S(121.04, 126.34, (ctx, s) => {
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "HIS NAME WAS HAROLDSON LAFAYET", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.93), sfx: [[0.15, 'whoosh']] });
+  S(53.5, 56.21, (ctx, s) => {
     CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BUNKER INHERITED A PERSON", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 27 ─ 126.34–130.35  Clause: "But in nineteen seventy-three, disaster ..." */
-  S(126.34, 130.35, (ctx, s) => {
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "HIS NAME WAS HAROLDSON LAFAYET", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(56.21, 59.13, (ctx, s) => {
+    CC.bg(ctx, PAL.paper, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "IN THE NINETEEN THIRTIES, H.L.", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.92), sfx: [[0.15, 'whoosh']] });
+  S(59.13, 61.39, (ctx, s) => {
+    CC.bg(ctx, PAL.sage, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "WAS QUITE LITERALLY THE RICHES", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.26), sfx: [[0.15, 'whoosh']] });
+  S(61.39, 64.19, (ctx, s) => {
+    CC.bg(ctx, PAL.wood, { floor: FL, floorCol: PAL.brown });
+    P.desk(ctx, 960, FL + 20, { s: 1.4 });
+    hl_hunt(ctx, s, { x: 680, y: FL, pose: 'hold', expr: 'smug' }, [{ at: 0.3, pose: 'present', expr: 'grin' }]);
+    CC.actor(ctx, s, 'crook', { x: 1240, y: FL, pose: 'face', expr: 'shock' }, [{ at: 0.5, pose: 'shrug', fx: 'sweat' }]);
+  }, { cam: CC.cam.push(680, FL - 200, 1.2, 0, 2.80), sfx: [[0.1, 'whoosh']] });
+  S(64.19, 66.77, (ctx, s) => {
+    CC.bg(ctx, PAL.beige, { floor: FL });
+    P.document(ctx, 960, 480, { s: 1.8, title: 'EAST TEXAS OIL LEASE' });
+    CC.stamp(ctx, s, 'WON IN POKER', 960, 480, 0.3, { col: PAL.red, size: 82 });
+  }, { cam: CC.cam.punch(960, 480, 1.3, 0.25), sfx: [[0.25, 'stamp']] });
+  S(66.77, 69.58, (ctx, s) => {
+    CC.bg(ctx, PAL.wood, { floor: FL, floorCol: PAL.brown });
+    P.desk(ctx, 960, FL + 20, { s: 1.4 });
+    hl_hunt(ctx, s, { x: 680, y: FL, pose: 'hold', expr: 'smug' }, [{ at: 0.3, pose: 'present', expr: 'grin' }]);
+    CC.actor(ctx, s, 'crook', { x: 1240, y: FL, pose: 'face', expr: 'shock' }, [{ at: 0.5, pose: 'shrug', fx: 'sweat' }]);
+  }, { cam: CC.cam.push(680, FL - 200, 1.2, 0, 2.81), sfx: [[0.1, 'whoosh']] });
+  S(69.58, 72.18, (ctx, s) => {
+    CC.bg(ctx, PAL.beige, { floor: FL });
+    P.document(ctx, 960, 480, { s: 1.8, title: 'EAST TEXAS OIL LEASE' });
+    CC.stamp(ctx, s, 'WON IN POKER', 960, 480, 0.3, { col: PAL.red, size: 82 });
+  }, { cam: CC.cam.punch(960, 480, 1.3, 0.25), sfx: [[0.25, 'stamp']] });
+  S(72.18, 76.63, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "HE TOOK THAT LEASE, TRADED IT ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 4.45), sfx: [[0.15, 'whoosh']] });
+  S(76.63, 80.74, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "HE TOOK THAT LEASE, TRADED IT ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(80.74, 82.41, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "HUNT WAS BRILLIANT, COMPLETELY", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.67), sfx: [[0.15, 'whoosh']] });
+  S(82.41, 84.34, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "HE CARRIED HIS LUNCH IN A BROW", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.93), sfx: [[0.15, 'whoosh']] });
+  S(84.34, 86.12, (ctx, s) => {
+    CC.bg(ctx, PAL.beige, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "HE CARRIED HIS LUNCH IN A BROW", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(86.12, 90.14, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "AND FIRMLY BELIEVED THAT PAPER", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 4.02), sfx: [[0.15, 'whoosh']] });
+  S(90.14, 93.86, (ctx, s) => {
+    CC.bg(ctx, PAL.paper, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "AND FIRMLY BELIEVED THAT PAPER", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(93.86, 96.95, (ctx, s) => {
+    CC.bg(ctx, PAL.sky, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "WHEN HE DIED IN NINETEEN SEVEN", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.09), sfx: [[0.15, 'whoosh']] });
+  S(96.95, 99.95, (ctx, s) => {
+    CC.bg(ctx, PAL.beige, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "STANDING RIGHT AT THE HEAD OF ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.00), sfx: [[0.15, 'whoosh']] });
+  S(99.95, 102.71, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "STANDING RIGHT AT THE HEAD OF ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(102.71, 104.8, (ctx, s) => {
+    CC.bg(ctx, PAL.paper, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "NELSON BUNKER HUNT, ALONGSIDE ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.09), sfx: [[0.15, 'whoosh']] });
+  S(104.8, 106.73, (ctx, s) => {
     CC.bg(ctx, PAL.slate, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'present', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BUT IN NINETEEN SEVENTY-T", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 28 ─ 130.35–131.93  Libya nationalization */
+    CC.actor(ctx, s, 'reporter', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "NELSON BUNKER HUNT, ALONGSIDE ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(106.73, 111.92, (ctx, s) => {
+    CC.bg(ctx, PAL.sage, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUNKER HUNT WAS A MASSIVE, QUI", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 5.19), sfx: [[0.15, 'whoosh']] });
+  S(111.92, 116.72, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "BUNKER HUNT WAS A MASSIVE, QUI", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(116.72, 118.97, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUT UNDERNEATH THAT CALM TEXAS", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.25), sfx: [[0.15, 'whoosh']] });
+  S(118.97, 121.04, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "BUT UNDERNEATH THAT CALM TEXAS", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(121.04, 123.8, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUNKER INHERITED A PERSONAL FO", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.76), sfx: [[0.15, 'whoosh']] });
+  S(123.8, 126.34, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "BUNKER INHERITED A PERSONAL FO", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(126.34, 128.43, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUT IN NINETEEN SEVENTY-THREE,", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.09), sfx: [[0.15, 'whoosh']] });
+  S(128.43, 130.35, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "BUT IN NINETEEN SEVENTY-THREE,", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
   S(130.35, 131.93, (ctx, s) => {
     CC.bg(ctx, PAL.tanDk, { floor: FL, floorCol: PAL.tan });
     P.skyscraper(ctx, 1300, FL, { w: 280, h: 500, col: PAL.slate, sign: 'SARIR OIL' });
-    bunker(ctx, s, { x: 500, y: FL, pose: 'cross', expr: 'shock' }, [
-      { at: 0.6, collapse: 'left', fx: 'sweat' }
-    ]);
-    CC.actor(ctx, s, 'cop', { x: 920, y: FL, pose: 'point', expr: 'angry' }, [
-      { at: 0, slideIn: 'right', dur: 0.5 }
-    ]);
-    CC.stamp(ctx, s, 'SEIZED $0', 960, 380, 0.6, { col: PAL.red, size: 95 });
-  });
-
-  /* 29 ─ 131.93–134.79  Libya nationalization */
+    bunker(ctx, s, { x: 500, y: FL, pose: 'cross', expr: 'shock' }, [{ at: 0.4, collapse: 'left', fx: 'sweat' }]);
+    CC.actor(ctx, s, 'cop', { x: 920, y: FL, pose: 'point', expr: 'angry' }, [{ at: 0, slideIn: 'right', dur: 0.4 }]);
+  }, { cam: CC.cam.punch(920, FL - 200, 1.25, 0.1), sfx: [[0.1, 'whoosh']] });
   S(131.93, 134.79, (ctx, s) => {
     CC.bg(ctx, PAL.tanDk, { floor: FL, floorCol: PAL.tan });
     P.skyscraper(ctx, 1300, FL, { w: 280, h: 500, col: PAL.slate, sign: 'SARIR OIL' });
-    bunker(ctx, s, { x: 500, y: FL, pose: 'cross', expr: 'shock' }, [
-      { at: 0.6, collapse: 'left', fx: 'sweat' }
-    ]);
-    CC.actor(ctx, s, 'cop', { x: 920, y: FL, pose: 'point', expr: 'angry' }, [
-      { at: 0, slideIn: 'right', dur: 0.5 }
-    ]);
-    CC.stamp(ctx, s, 'SEIZED $0', 960, 380, 0.6, { col: PAL.red, size: 95 });
-  });
-
-  /* 30 ─ 134.79–139.22  Libya nationalization */
-  S(134.79, 139.22, (ctx, s) => {
+    bunker(ctx, s, { x: 500, y: FL, pose: 'cross', expr: 'shock' }, [{ at: 0.4, collapse: 'left', fx: 'sweat' }]);
+    CC.actor(ctx, s, 'cop', { x: 920, y: FL, pose: 'point', expr: 'angry' }, [{ at: 0, slideIn: 'right', dur: 0.4 }]);
+  }, { cam: CC.cam.punch(920, FL - 200, 1.25, 0.1), sfx: [[0.1, 'whoosh']] });
+  S(134.79, 137.09, (ctx, s) => {
     CC.bg(ctx, PAL.tanDk, { floor: FL, floorCol: PAL.tan });
     P.skyscraper(ctx, 1300, FL, { w: 280, h: 500, col: PAL.slate, sign: 'SARIR OIL' });
-    bunker(ctx, s, { x: 500, y: FL, pose: 'cross', expr: 'shock' }, [
-      { at: 0.6, collapse: 'left', fx: 'sweat' }
-    ]);
-    CC.actor(ctx, s, 'cop', { x: 920, y: FL, pose: 'point', expr: 'angry' }, [
-      { at: 0, slideIn: 'right', dur: 0.5 }
-    ]);
-    CC.stamp(ctx, s, 'SEIZED $0', 960, 380, 0.6, { col: PAL.red, size: 95 });
-  });
-
-  /* 31 ─ 139.22–142.52  Libya nationalization */
-  S(139.22, 142.52, (ctx, s) => {
+    bunker(ctx, s, { x: 500, y: FL, pose: 'cross', expr: 'shock' }, [{ at: 0.4, collapse: 'left', fx: 'sweat' }]);
+    CC.actor(ctx, s, 'cop', { x: 920, y: FL, pose: 'point', expr: 'angry' }, [{ at: 0, slideIn: 'right', dur: 0.4 }]);
+  }, { cam: CC.cam.punch(920, FL - 200, 1.25, 0.1), sfx: [[0.1, 'whoosh']] });
+  S(137.09, 139.22, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.stamp(ctx, s, 'NATIONALIZED: $0', 960, 450, 0.2, { col: PAL.red, size: 95 });
+    bunker(ctx, s, { x: 960, y: FL, s: 1.7, expr: 'furious' }, [{ at: 0.2, pose: 'slump', fx: 'sweat' }]);
+  }, { cam: CC.cam.punch(960, 450, 1.3, 0.2), sfx: [[0.2, 'thud']] });
+  S(139.22, 140.94, (ctx, s) => {
     CC.bg(ctx, PAL.tanDk, { floor: FL, floorCol: PAL.tan });
     P.skyscraper(ctx, 1300, FL, { w: 280, h: 500, col: PAL.slate, sign: 'SARIR OIL' });
-    bunker(ctx, s, { x: 500, y: FL, pose: 'cross', expr: 'shock' }, [
-      { at: 0.6, collapse: 'left', fx: 'sweat' }
-    ]);
-    CC.actor(ctx, s, 'cop', { x: 920, y: FL, pose: 'point', expr: 'angry' }, [
-      { at: 0, slideIn: 'right', dur: 0.5 }
-    ]);
-    CC.stamp(ctx, s, 'SEIZED $0', 960, 380, 0.6, { col: PAL.red, size: 95 });
-  });
-
-  /* 32 ─ 142.52–147.29  Clause: "He realized that a government could wipe..." */
-  S(142.52, 147.29, (ctx, s) => {
-    CC.bg(ctx, PAL.sage, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "HE REALIZED THAT A GOVERN", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 33 ─ 147.29–152.77  Clause: "At the exact same time, back home in Ame..." */
-  S(147.29, 152.77, (ctx, s) => {
+    bunker(ctx, s, { x: 500, y: FL, pose: 'cross', expr: 'shock' }, [{ at: 0.4, collapse: 'left', fx: 'sweat' }]);
+    CC.actor(ctx, s, 'cop', { x: 920, y: FL, pose: 'point', expr: 'angry' }, [{ at: 0, slideIn: 'right', dur: 0.4 }]);
+  }, { cam: CC.cam.punch(920, FL - 200, 1.25, 0.1), sfx: [[0.1, 'whoosh']] });
+  S(140.94, 142.52, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.stamp(ctx, s, 'NATIONALIZED: $0', 960, 450, 0.2, { col: PAL.red, size: 95 });
+    bunker(ctx, s, { x: 960, y: FL, s: 1.7, expr: 'furious' }, [{ at: 0.2, pose: 'slump', fx: 'sweat' }]);
+  }, { cam: CC.cam.punch(960, 450, 1.3, 0.2), sfx: [[0.2, 'thud']] });
+  S(142.52, 145.0, (ctx, s) => {
+    CC.bg(ctx, PAL.beige, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "HE REALIZED THAT A GOVERNMENT ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.48), sfx: [[0.15, 'whoosh']] });
+  S(145.0, 147.29, (ctx, s) => {
     CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'present', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "AT THE EXACT SAME TIME, B", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 34 ─ 152.77–157.52  Nixon closes gold window */
-  S(152.77, 157.52, (ctx, s) => {
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "HE REALIZED THAT A GOVERNMENT ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(147.29, 150.14, (ctx, s) => {
     CC.bg(ctx, PAL.paper, { floor: FL });
-    P.podium(ctx, 960, FL + 30, { label: '1971' });
-    CC.actor(ctx, s, 'techceo', { x: 960, y: FL - 30, pose: 'present', expr: 'confident' }, [
-      { at: 0.5, pose: 'point', expr: 'serious' }
-    ]);
-    CC.swap(ctx, s, 0.7, 1400, 500, c => P.coin(c, 0, 0, { s: 1.8, col: PAL.gold }), c => P.bill(c, 0, 0, { s: 1.5 }));
-    CC.stamp(ctx, s, 'FIAT CURRENCY', 960, 220, 0.8, { col: PAL.red, size: 84 });
-  });
-
-  /* 35 ─ 157.52–164.34  Clause: "Prices for bread, milk, and gasoline wer..." */
-  S(157.52, 164.34, (ctx, s) => {
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "AT THE EXACT SAME TIME, BACK H", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.85), sfx: [[0.15, 'whoosh']] });
+  S(150.14, 152.77, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "AT THE EXACT SAME TIME, BACK H", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(152.77, 155.24, (ctx, s) => {
+    CC.bg(ctx, PAL.sage, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "PRESIDENT RICHARD NIXON HAD JU", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.47), sfx: [[0.15, 'whoosh']] });
+  S(155.24, 157.52, (ctx, s) => {
     CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "PRICES FOR BREAD, MILK, A", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 36 ─ 164.34–170.93  Clause: "Bunker turned to his brother Herbert and..." */
-  S(164.34, 170.93, (ctx, s) => {
-    CC.bg(ctx, PAL.sky, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BUNKER TURNED TO HIS BROT", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 37 ─ 170.93–173.04  Clause: "they were going to end up broke...." */
+    CC.actor(ctx, s, 'worker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "PRESIDENT RICHARD NIXON HAD JU", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(157.52, 161.07, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "PRICES FOR BREAD, MILK, AND GA", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.55), sfx: [[0.15, 'whoosh']] });
+  S(161.07, 164.34, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "PRICES FOR BREAD, MILK, AND GA", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(164.34, 167.77, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUNKER TURNED TO HIS BROTHER H", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.43), sfx: [[0.15, 'whoosh']] });
+  S(167.77, 170.93, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "BUNKER TURNED TO HIS BROTHER H", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
   S(170.93, 173.04, (ctx, s) => {
-    CC.bg(ctx, PAL.beige, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THEY WERE GOING TO END UP", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 38 ─ 173.04–174.18  Clause: "They needed something real...." */
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THEY WERE GOING TO END UP BROK", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.11), sfx: [[0.15, 'whoosh']] });
   S(173.04, 174.18, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THEY NEEDED SOMETHING REAL.", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.14), sfx: [[0.15, 'whoosh']] });
+  /* CH 2 */ S(174.18, 177.27, (ctx, s) => CC.chapter(ctx, s, "The Shiny Metal Loophole", { kicker: "CHAPTER TWO", at: 0.1, dur: 1.0 }), { cam: CC.cam.punch(960, 540, 1.1, 0.1), sfx: [[0.1, 'thud']] });
+  S(177.27, 179.35, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "GOLD HAD BEEN THE ULTIMATE STO", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.08), sfx: [[0.15, 'whoosh']] });
+  S(179.35, 181.27, (ctx, s) => {
     CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THEY NEEDED SOMETHING REA", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 39 ─ 174.18–177.27  Chapter Card: The Shiny Metal Loophole */
-  S(174.18, 177.27, (ctx, s) => {
-    CC.chapter(ctx, s, "The Shiny Metal Loophole", { kicker: "CHAPTER TWO", at: 0.1, dur: 1.20 });
-  }, { fadeIn: 0.15, fadeOut: 0.15 });
-
-  /* 40 ─ 177.27–181.27  Clause: "Gold had been the ultimate store of valu..." */
-  S(177.27, 181.27, (ctx, s) => {
-    CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "GOLD HAD BEEN THE ULTIMAT", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 41 ─ 181.27–184.3  Clause: "But there was a gigantic legal roadblock..." */
+    CC.actor(ctx, s, 'worker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "GOLD HAD BEEN THE ULTIMATE STO", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
   S(181.27, 184.3, (ctx, s) => {
-    CC.bg(ctx, PAL.slate, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BUT THERE WAS A GIGANTIC ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 42 ─ 184.3–189.07  Gold ownership illegal / jail */
-  S(184.3, 189.07, (ctx, s) => {
-    CC.bg(ctx, PAL.slateDk, { floor: FL, floorCol: PAL.greyDk });
-    CC.obj(ctx, s, { x: 960, y: 520, in: 'none' }, c => P.bars(c, 0, 0, { w: 700, h: 500 }));
-    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, pose: 'face', expr: 'worried' }, [
-      { at: 0.5, pose: 'slump', fx: 'sweat' }
-    ]);
-    CC.callout(ctx, 'EXECUTIVE ORDER 6102', 960, 160, s.lt, 0.4, { size: 68 });
-  });
-
-  /* 43 ─ 189.07–193.36  Gold ownership illegal / jail */
-  S(189.07, 193.36, (ctx, s) => {
-    CC.bg(ctx, PAL.slateDk, { floor: FL, floorCol: PAL.greyDk });
-    CC.obj(ctx, s, { x: 960, y: 520, in: 'none' }, c => P.bars(c, 0, 0, { w: 700, h: 500 }));
-    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, pose: 'face', expr: 'worried' }, [
-      { at: 0.5, pose: 'slump', fx: 'sweat' }
-    ]);
-    CC.callout(ctx, 'EXECUTIVE ORDER 6102', 960, 160, s.lt, 0.4, { size: 68 });
-  });
-
-  /* 44 ─ 193.36–198.15  Gold ownership illegal / jail */
-  S(193.36, 198.15, (ctx, s) => {
-    CC.bg(ctx, PAL.slateDk, { floor: FL, floorCol: PAL.greyDk });
-    CC.obj(ctx, s, { x: 960, y: 520, in: 'none' }, c => P.bars(c, 0, 0, { w: 700, h: 500 }));
-    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, pose: 'face', expr: 'worried' }, [
-      { at: 0.5, pose: 'slump', fx: 'sweat' }
-    ]);
-    CC.callout(ctx, 'EXECUTIVE ORDER 6102', 960, 160, s.lt, 0.4, { size: 68 });
-  });
-
-  /* 45 ─ 198.15–201.72  Clause: "So Bunker and Herbert began looking for ..." */
-  S(198.15, 201.72, (ctx, s) => {
-    CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'present', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "SO BUNKER AND HERBERT BEG", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 46 ─ 201.72–206.08  Clause: "And sitting right in plain sight was gol..." */
-  S(201.72, 206.08, (ctx, s) => {
-    CC.bg(ctx, PAL.sage, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "AND SITTING RIGHT IN PLAI", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 47 ─ 206.08–210.68  Clause: "Silver was completely legal for any Amer..." */
-  S(206.08, 210.68, (ctx, s) => {
+    CC.bg(ctx, PAL.sky, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUT THERE WAS A GIGANTIC LEGAL", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.03), sfx: [[0.15, 'whoosh']] });
+  S(184.3, 186.78, (ctx, s) => {
+    CC.bg(ctx, PAL.beige, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "EVER SINCE PRESIDENT FRANKLIN ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.48), sfx: [[0.15, 'whoosh']] });
+  S(186.78, 189.07, (ctx, s) => {
     CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "SILVER WAS COMPLETELY LEG", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 48 ─ 210.68–211.86  Clause: "Even better, it was shockingly cheap...." */
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "EVER SINCE PRESIDENT FRANKLIN ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(189.07, 191.3, (ctx, s) => {
+    CC.bg(ctx, PAL.paper, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "IT WAS STRICTLY ILLEGAL FOR PR", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.23), sfx: [[0.15, 'whoosh']] });
+  S(191.3, 193.36, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "IT WAS STRICTLY ILLEGAL FOR PR", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(193.36, 195.85, (ctx, s) => {
+    CC.bg(ctx, PAL.sage, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE GOVERNMENT WOULD THROW YOU", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.49), sfx: [[0.15, 'whoosh']] });
+  S(195.85, 198.15, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THE GOVERNMENT WOULD THROW YOU", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(198.15, 200.01, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "SO BUNKER AND HERBERT BEGAN LO", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.86), sfx: [[0.15, 'whoosh']] });
+  S(200.01, 201.72, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "SO BUNKER AND HERBERT BEGAN LO", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(201.72, 203.99, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "AND SITTING RIGHT IN PLAIN SIG", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.27), sfx: [[0.15, 'whoosh']] });
+  S(203.99, 206.08, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "AND SITTING RIGHT IN PLAIN SIG", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(206.08, 208.47, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "SILVER WAS COMPLETELY LEGAL FO", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.39), sfx: [[0.15, 'whoosh']] });
+  S(208.47, 210.68, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "SILVER WAS COMPLETELY LEGAL FO", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
   S(210.68, 211.86, (ctx, s) => {
-    CC.bg(ctx, PAL.slate, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "EVEN BETTER, IT WAS SHOCK", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 49 ─ 211.86–219.21  Clause: "Throughout the early nineteen seventies,..." */
-  S(211.86, 219.21, (ctx, s) => {
-    CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THROUGHOUT THE EARLY NINE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 50 ─ 219.21–222.66  Clause: "But Bunker Hunt was not just looking at ..." */
-  S(219.21, 222.66, (ctx, s) => {
-    CC.bg(ctx, PAL.sky, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BUT BUNKER HUNT WAS NOT J", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 51 ─ 222.66–225.34  Clause: "He started studying the global supply ch..." */
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "EVEN BETTER, IT WAS SHOCKINGLY", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.18), sfx: [[0.15, 'whoosh']] });
+  S(211.86, 215.68, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THROUGHOUT THE EARLY NINETEEN ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.82), sfx: [[0.15, 'whoosh']] });
+  S(215.68, 219.21, (ctx, s) => {
+    CC.bg(ctx, PAL.beige, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THROUGHOUT THE EARLY NINETEEN ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(219.21, 221.0, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUT BUNKER HUNT WAS NOT JUST L", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.79), sfx: [[0.15, 'whoosh']] });
+  S(221.0, 222.66, (ctx, s) => {
+    CC.bg(ctx, PAL.paper, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "BUT BUNKER HUNT WAS NOT JUST L", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
   S(222.66, 225.34, (ctx, s) => {
-    CC.bg(ctx, PAL.beige, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'present', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "HE STARTED STUDYING THE G", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 52 ─ 225.34–232.44  Clause: "Back then, the world was consuming far m..." */
-  S(225.34, 232.44, (ctx, s) => {
-    CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BACK THEN, THE WORLD WAS ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 53 ─ 232.44–241.79  Industrial silver demand */
-  S(232.44, 241.79, (ctx, s) => {
-    CC.bg(ctx, PAL.skyLt, { floor: FL });
-    P.computer(ctx, 640, FL, { s: 1.4, screen: PAL.slate });
-    CC.obj(ctx, s, { x: 1280, y: 520, at: 0.3, in: 'pop' }, c => {
-      CC.rect(c, -160, -120, 320, 240, PAL.yellow, 6, 8);
-      CC.text(c, 'KODAK FILM', 0, 0, 44, PAL.black, { font: 'PMarker' });
-    });
-    CC.stamp(ctx, s, 'SUPPLY DEFICIT', 960, 220, 0.7, { col: PAL.red, size: 85 });
-  });
-
-  /* 54 ─ 241.79–242.96  Industrial silver demand */
-  S(241.79, 242.96, (ctx, s) => {
-    CC.bg(ctx, PAL.skyLt, { floor: FL });
-    P.computer(ctx, 640, FL, { s: 1.4, screen: PAL.slate });
-    CC.obj(ctx, s, { x: 1280, y: 520, at: 0.3, in: 'pop' }, c => {
-      CC.rect(c, -160, -120, 320, 240, PAL.yellow, 6, 8);
-      CC.text(c, 'KODAK FILM', 0, 0, 44, PAL.black, { font: 'PMarker' });
-    });
-    CC.stamp(ctx, s, 'SUPPLY DEFICIT', 960, 220, 0.7, { col: PAL.red, size: 85 });
-  });
-
-  /* 55 ─ 242.96–246.16  Industrial silver demand */
-  S(242.96, 246.16, (ctx, s) => {
-    CC.bg(ctx, PAL.skyLt, { floor: FL });
-    P.computer(ctx, 640, FL, { s: 1.4, screen: PAL.slate });
-    CC.obj(ctx, s, { x: 1280, y: 520, at: 0.3, in: 'pop' }, c => {
-      CC.rect(c, -160, -120, 320, 240, PAL.yellow, 6, 8);
-      CC.text(c, 'KODAK FILM', 0, 0, 44, PAL.black, { font: 'PMarker' });
-    });
-    CC.stamp(ctx, s, 'SUPPLY DEFICIT', 960, 220, 0.7, { col: PAL.red, size: 85 });
-  });
-
-  /* 56 ─ 246.16–253.05  Clause: "The gap between supply and demand was be..." */
-  S(246.16, 253.05, (ctx, s) => {
-    CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THE GAP BETWEEN SUPPLY AN", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 57 ─ 253.05–256.36  Clause: "But those government reserves were runni..." */
-  S(253.05, 256.36, (ctx, s) => {
     CC.bg(ctx, PAL.sky, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'present', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BUT THOSE GOVERNMENT RESE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 58 ─ 256.36–259.46  Clause: "Bunker Hunt ran the numbers and came to ..." */
-  S(256.36, 259.46, (ctx, s) => {
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "HE STARTED STUDYING THE GLOBAL", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.68), sfx: [[0.15, 'whoosh']] });
+  S(225.34, 229.03, (ctx, s) => {
     CC.bg(ctx, PAL.beige, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BUNKER HUNT RAN THE NUMBE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 59 ─ 259.46–263.47  Clause: "If someone with enough cash stepped into..." */
-  S(259.46, 263.47, (ctx, s) => {
-    CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "IF SOMEONE WITH ENOUGH CA", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 60 ─ 263.47–267.61  Clause: "the entire global industrial machine wou..." */
-  S(263.47, 267.61, (ctx, s) => {
-    CC.bg(ctx, PAL.sage, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THE ENTIRE GLOBAL INDUSTR", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 61 ─ 267.61–273.52  Clause: "In nineteen seventy-three, the Hunt brot..." */
-  S(267.61, 273.52, (ctx, s) => {
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BACK THEN, THE WORLD WAS CONSU", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.69), sfx: [[0.15, 'whoosh']] });
+  S(229.03, 232.44, (ctx, s) => {
     CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "IN NINETEEN SEVENTY-THREE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 62 ─ 273.52–278.54  Clause: "They quietly purchased twenty million ou..." */
-  S(273.52, 278.54, (ctx, s) => {
+    CC.actor(ctx, s, 'worker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "BACK THEN, THE WORLD WAS CONSU", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(232.44, 237.3, (ctx, s) => {
+    CC.bg(ctx, PAL.paper, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE PHOTOGRAPHIC GIANT EASTMAN", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 4.86), sfx: [[0.15, 'whoosh']] });
+  S(237.3, 241.79, (ctx, s) => {
     CC.bg(ctx, PAL.slate, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THEY QUIETLY PURCHASED TW", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 63 ─ 278.54–281.18  Clause: "But the brothers knew their own fortune,..." */
-  S(278.54, 281.18, (ctx, s) => {
-    CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'present', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BUT THE BROTHERS KNEW THE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 64 ─ 281.18–284.52  Clause: "could only push the market so far...." */
-  S(281.18, 284.52, (ctx, s) => {
-    CC.bg(ctx, PAL.sky, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "COULD ONLY PUSH THE MARKE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 65 ─ 284.52–286.75  Clause: "They needed allies with deep pockets and..." */
-  S(284.52, 286.75, (ctx, s) => {
-    CC.bg(ctx, PAL.beige, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THEY NEEDED ALLIES WITH D", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 66 ─ 286.75–291.49  Saudi alliance / handshake */
-  S(286.75, 291.49, (ctx, s) => {
-    CC.bg(ctx, PAL.tan, { floor: FL, floorCol: PAL.tanDk });
-    bunker(ctx, s, { x: 620, y: FL, pose: 'give', expr: 'smug' }, [
-      { at: 0.4, pose: 'wave', expr: 'happy' }
-    ]);
-    CC.actor(ctx, s, 'tycoon', { x: 1300, y: FL, robe: true, hair: 'none', expr: 'confident' }, [
-      { at: 0.2, slideIn: 'right', dur: 0.5 }, { at: 0.7, pose: 'point' }
-    ]);
-    CC.callout(ctx, 'PETRODOLLAR ALLIANCE', 960, 240, s.lt, 0.5, { size: 76 });
-  });
-
-  /* 67 ─ 291.49–298.34  Saudi alliance / handshake */
-  S(291.49, 298.34, (ctx, s) => {
-    CC.bg(ctx, PAL.tan, { floor: FL, floorCol: PAL.tanDk });
-    bunker(ctx, s, { x: 620, y: FL, pose: 'give', expr: 'smug' }, [
-      { at: 0.4, pose: 'wave', expr: 'happy' }
-    ]);
-    CC.actor(ctx, s, 'tycoon', { x: 1300, y: FL, robe: true, hair: 'none', expr: 'confident' }, [
-      { at: 0.2, slideIn: 'right', dur: 0.5 }, { at: 0.7, pose: 'point' }
-    ]);
-    CC.callout(ctx, 'PETRODOLLAR ALLIANCE', 960, 240, s.lt, 0.5, { size: 76 });
-  });
-
-  /* 68 ─ 298.34–300.58  Clause: "Bunker laid out his theory...." */
-  S(298.34, 300.58, (ctx, s) => {
+    CC.actor(ctx, s, 'reporter', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THE PHOTOGRAPHIC GIANT EASTMAN", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(241.79, 242.96, (ctx, s) => {
+    CC.bg(ctx, PAL.sage, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "ELECTRONICS MANUFACTURERS NEED", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.17), sfx: [[0.15, 'whoosh']] });
+  S(242.96, 246.16, (ctx, s) => {
     CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BUNKER LAID OUT HIS THEOR", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 69 ─ 300.58–302.93  Saudi alliance / handshake */
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "MEDICAL COMPANIES NEEDED SILVE", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.20), sfx: [[0.15, 'whoosh']] });
+  S(246.16, 249.74, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE GAP BETWEEN SUPPLY AND DEM", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.58), sfx: [[0.15, 'whoosh']] });
+  S(249.74, 253.05, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THE GAP BETWEEN SUPPLY AND DEM", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(253.05, 254.77, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUT THOSE GOVERNMENT RESERVES ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.72), sfx: [[0.15, 'whoosh']] });
+  S(254.77, 256.36, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "BUT THOSE GOVERNMENT RESERVES ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(256.36, 259.46, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUNKER HUNT RAN THE NUMBERS AN", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.10), sfx: [[0.15, 'whoosh']] });
+  S(259.46, 261.55, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "IF SOMEONE WITH ENOUGH CASH ST", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.09), sfx: [[0.15, 'whoosh']] });
+  S(261.55, 263.47, (ctx, s) => {
+    CC.bg(ctx, PAL.beige, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "IF SOMEONE WITH ENOUGH CASH ST", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(263.47, 265.62, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE ENTIRE GLOBAL INDUSTRIAL M", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.15), sfx: [[0.15, 'whoosh']] });
+  S(265.62, 267.61, (ctx, s) => {
+    CC.bg(ctx, PAL.paper, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THE ENTIRE GLOBAL INDUSTRIAL M", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(267.61, 270.68, (ctx, s) => {
+    CC.bg(ctx, PAL.sky, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "IN NINETEEN SEVENTY-THREE, THE", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.07), sfx: [[0.15, 'whoosh']] });
+  S(270.68, 273.52, (ctx, s) => {
+    CC.bg(ctx, PAL.sage, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "IN NINETEEN SEVENTY-THREE, THE", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(273.52, 276.13, (ctx, s) => {
+    CC.bg(ctx, PAL.beige, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THEY QUIETLY PURCHASED TWENTY ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.61), sfx: [[0.15, 'whoosh']] });
+  S(276.13, 278.54, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THEY QUIETLY PURCHASED TWENTY ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(278.54, 281.18, (ctx, s) => {
+    CC.bg(ctx, PAL.paper, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUT THE BROTHERS KNEW THEIR OW", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.64), sfx: [[0.15, 'whoosh']] });
+  S(281.18, 282.92, (ctx, s) => {
+    CC.bg(ctx, PAL.sage, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "COULD ONLY PUSH THE MARKET SO ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.74), sfx: [[0.15, 'whoosh']] });
+  S(282.92, 284.52, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "COULD ONLY PUSH THE MARKET SO ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(284.52, 286.75, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THEY NEEDED ALLIES WITH DEEP P", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.23), sfx: [[0.15, 'whoosh']] });
+  S(286.75, 289.21, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "SO BUNKER HUNT BOARDED AN AIRP", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.46), sfx: [[0.15, 'whoosh']] });
+  S(289.21, 291.49, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "SO BUNKER HUNT BOARDED AN AIRP", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(291.49, 295.05, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "HE MET WITH MEMBERS OF THE SAU", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.56), sfx: [[0.15, 'whoosh']] });
+  S(295.05, 298.34, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "HE MET WITH MEMBERS OF THE SAU", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(298.34, 300.58, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUNKER LAID OUT HIS THEORY.", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.24), sfx: [[0.15, 'whoosh']] });
   S(300.58, 302.93, (ctx, s) => {
-    CC.bg(ctx, PAL.tan, { floor: FL, floorCol: PAL.tanDk });
-    bunker(ctx, s, { x: 620, y: FL, pose: 'give', expr: 'smug' }, [
-      { at: 0.4, pose: 'wave', expr: 'happy' }
-    ]);
-    CC.actor(ctx, s, 'tycoon', { x: 1300, y: FL, robe: true, hair: 'none', expr: 'confident' }, [
-      { at: 0.2, slideIn: 'right', dur: 0.5 }, { at: 0.7, pose: 'point' }
-    ]);
-    CC.callout(ctx, 'PETRODOLLAR ALLIANCE', 960, 240, s.lt, 0.5, { size: 76 });
-  });
-
-  /* 70 ─ 302.93–308.62  Saudi alliance / handshake */
-  S(302.93, 308.62, (ctx, s) => {
-    CC.bg(ctx, PAL.tan, { floor: FL, floorCol: PAL.tanDk });
-    bunker(ctx, s, { x: 620, y: FL, pose: 'give', expr: 'smug' }, [
-      { at: 0.4, pose: 'wave', expr: 'happy' }
-    ]);
-    CC.actor(ctx, s, 'tycoon', { x: 1300, y: FL, robe: true, hair: 'none', expr: 'confident' }, [
-      { at: 0.2, slideIn: 'right', dur: 0.5 }, { at: 0.7, pose: 'point' }
-    ]);
-    CC.callout(ctx, 'PETRODOLLAR ALLIANCE', 960, 240, s.lt, 0.5, { size: 76 });
-  });
-
-  /* 71 ─ 308.62–312.83  Saudi alliance / handshake */
-  S(308.62, 312.83, (ctx, s) => {
-    CC.bg(ctx, PAL.tan, { floor: FL, floorCol: PAL.tanDk });
-    bunker(ctx, s, { x: 620, y: FL, pose: 'give', expr: 'smug' }, [
-      { at: 0.4, pose: 'wave', expr: 'happy' }
-    ]);
-    CC.actor(ctx, s, 'tycoon', { x: 1300, y: FL, robe: true, hair: 'none', expr: 'confident' }, [
-      { at: 0.2, slideIn: 'right', dur: 0.5 }, { at: 0.7, pose: 'point' }
-    ]);
-    CC.callout(ctx, 'PETRODOLLAR ALLIANCE', 960, 240, s.lt, 0.5, { size: 76 });
-  });
-
-  /* 72 ─ 312.83–315.22  Clause: "Together, they formed a secret offshore ..." */
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "HE TOLD THE SAUDIS THAT WESTER", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.35), sfx: [[0.15, 'whoosh']] });
+  S(302.93, 305.89, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "AND THAT TOGETHER, THEY COULD ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.96), sfx: [[0.15, 'whoosh']] });
+  S(305.89, 308.62, (ctx, s) => {
+    CC.bg(ctx, PAL.paper, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "AND THAT TOGETHER, THEY COULD ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(308.62, 310.81, (ctx, s) => {
+    CC.bg(ctx, PAL.sky, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE SAUDIS LOVED THE IDEA.", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.19), sfx: [[0.15, 'whoosh']] });
+  S(310.81, 312.83, (ctx, s) => {
+    CC.bg(ctx, PAL.sage, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THE SAUDIS LOVED THE IDEA.", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
   S(312.83, 315.22, (ctx, s) => {
     CC.bg(ctx, PAL.beige, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "TOGETHER, THEY FORMED A S", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 73 ─ 315.22–320.84  Clause: "The trap was set, and the squeeze was ab..." */
-  S(315.22, 320.84, (ctx, s) => {
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "TOGETHER, THEY FORMED A SECRET", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.39), sfx: [[0.15, 'whoosh']] });
+  S(315.22, 318.14, (ctx, s) => {
     CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THE TRAP WAS SET, AND THE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 74 ─ 320.84–324.38  Clause: "To understand how the Hunt brothers pull..." */
-  S(320.84, 324.38, (ctx, s) => {
-    CC.bg(ctx, PAL.sage, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "TO UNDERSTAND HOW THE HUN", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 75 ─ 324.38–327.44  Chapter Card: The Midnight Airlift */
-  S(324.38, 327.44, (ctx, s) => {
-    CC.chapter(ctx, s, "The Midnight Airlift", { kicker: "CHAPTER THREE", at: 0.1, dur: 1.20 });
-  }, { fadeIn: 0.15, fadeOut: 0.15 });
-
-  /* 76 ─ 327.44–335.85  Clause: "Normally, when big hedge funds or corpor..." */
-  S(327.44, 335.85, (ctx, s) => {
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE TRAP WAS SET, AND THE SQUE", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.92), sfx: [[0.15, 'whoosh']] });
+  S(318.14, 320.84, (ctx, s) => {
     CC.bg(ctx, PAL.slate, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "NORMALLY, WHEN BIG HEDGE ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 77 ─ 335.85–338.36  Clause: "nobody actually expects to see a single ..." */
+    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THE TRAP WAS SET, AND THE SQUE", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(320.84, 322.68, (ctx, s) => {
+    CC.bg(ctx, PAL.sage, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "TO UNDERSTAND HOW THE HUNT BRO", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.84), sfx: [[0.15, 'whoosh']] });
+  S(322.68, 324.38, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "TO UNDERSTAND HOW THE HUNT BRO", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  /* CH 3 */ S(324.38, 327.44, (ctx, s) => CC.chapter(ctx, s, "The Midnight Airlift", { kicker: "CHAPTER THREE", at: 0.1, dur: 1.0 }), { cam: CC.cam.punch(960, 540, 1.1, 0.1), sfx: [[0.1, 'thud']] });
+  S(327.44, 331.81, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "NORMALLY, WHEN BIG HEDGE FUNDS", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 4.37), sfx: [[0.15, 'whoosh']] });
+  S(331.81, 335.85, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "NORMALLY, WHEN BIG HEDGE FUNDS", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
   S(335.85, 338.36, (ctx, s) => {
     CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "NOBODY ACTUALLY EXPECTS T", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 78 ─ 338.36–341.71  Clause: "Instead, traders buy futures contracts...." */
-  S(338.36, 341.71, (ctx, s) => {
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "NOBODY ACTUALLY EXPECTS TO SEE", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.51), sfx: [[0.15, 'whoosh']] });
+  S(338.36, 340.1, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "INSTEAD, TRADERS BUY FUTURES C", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.74), sfx: [[0.15, 'whoosh']] });
+  S(340.1, 341.71, (ctx, s) => {
     CC.bg(ctx, PAL.sky, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "INSTEAD, TRADERS BUY FUTU", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 79 ─ 341.71–348.23  Clause: "A futures contract is simply a legal agr..." */
-  S(341.71, 348.23, (ctx, s) => {
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "INSTEAD, TRADERS BUY FUTURES C", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(341.71, 345.1, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "A FUTURES CONTRACT IS SIMPLY A", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.39), sfx: [[0.15, 'whoosh']] });
+  S(345.1, 348.23, (ctx, s) => {
     CC.bg(ctx, PAL.beige, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "A FUTURES CONTRACT IS SIM", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 80 ─ 348.23–353.6  Clause: "But when that delivery date arrives, nin..." */
-  S(348.23, 353.6, (ctx, s) => {
+    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "A FUTURES CONTRACT IS SIMPLY A", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(348.23, 351.02, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUT WHEN THAT DELIVERY DATE AR", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.79), sfx: [[0.15, 'whoosh']] });
+  S(351.02, 353.6, (ctx, s) => {
     CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BUT WHEN THAT DELIVERY DA", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 81 ─ 353.6–360.53  Clause: "They simply settle the contract in cash,..." */
-  S(353.6, 360.53, (ctx, s) => {
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "BUT WHEN THAT DELIVERY DATE AR", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(353.6, 357.2, (ctx, s) => {
+    CC.bg(ctx, PAL.sky, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THEY SIMPLY SETTLE THE CONTRAC", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.60), sfx: [[0.15, 'whoosh']] });
+  S(357.2, 360.53, (ctx, s) => {
     CC.bg(ctx, PAL.sage, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'present', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THEY SIMPLY SETTLE THE CO", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 82 ─ 360.53–362.19  Clause: "and roll over into the next month...." */
+    CC.actor(ctx, s, 'analyst', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THEY SIMPLY SETTLE THE CONTRAC", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
   S(360.53, 362.19, (ctx, s) => {
-    CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "AND ROLL OVER INTO THE NE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 83 ─ 362.19–364.14  Clause: "The Hunt brothers, however, had zero int..." */
+    CC.bg(ctx, PAL.beige, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "AND ROLL OVER INTO THE NEXT MO", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.66), sfx: [[0.15, 'whoosh']] });
   S(362.19, 364.14, (ctx, s) => {
-    CC.bg(ctx, PAL.slate, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THE HUNT BROTHERS, HOWEVE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 84 ─ 364.14–368.46  Clause: "They did not want paper cash...." */
-  S(364.14, 368.46, (ctx, s) => {
-    CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THEY DID NOT WANT PAPER C", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 85 ─ 368.46–368.66  Clause: "They wanted the metal...." */
-  S(368.46, 368.66, (ctx, s) => {
-    CC.bg(ctx, PAL.sky, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THEY WANTED THE METAL.", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 86 ─ 368.66–372.91  Clause: "When their contracts expired, the Hunts ..." */
-  S(368.66, 372.91, (ctx, s) => {
-    CC.bg(ctx, PAL.beige, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "WHEN THEIR CONTRACTS EXPI", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 87 ─ 372.91–374.84  Clause: "They demanded physical delivery...." */
-  S(372.91, 374.84, (ctx, s) => {
     CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'present', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THEY DEMANDED PHYSICAL DE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 88 ─ 374.84–378.25  Clause: "They told the exchange: do not wire us d..." */
-  S(374.84, 378.25, (ctx, s) => {
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE HUNT BROTHERS, HOWEVER, HA", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.95), sfx: [[0.15, 'whoosh']] });
+  S(364.14, 366.39, (ctx, s) => {
     CC.bg(ctx, PAL.sage, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THEY TOLD THE EXCHANGE: D", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 89 ─ 378.25–385.42  Clause: "Suddenly, armored trucks began backing u..." */
-  S(378.25, 385.42, (ctx, s) => {
-    CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "SUDDENLY, ARMORED TRUCKS ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 90 ─ 385.42–390.55  Clause: "loading up thousands of heavy thirty-two..." */
-  S(385.42, 390.55, (ctx, s) => {
-    CC.bg(ctx, PAL.slate, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "LOADING UP THOUSANDS OF H", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 91 ─ 390.55–394.2  Clause: "But Bunker Hunt was terrified the United..." */
-  S(390.55, 394.2, (ctx, s) => {
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THEY DID NOT WANT PAPER CASH.", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.25), sfx: [[0.15, 'whoosh']] });
+  S(366.39, 368.46, (ctx, s) => {
     CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BUT BUNKER HUNT WAS TERRI", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 92 ─ 394.2–398.71  Gold ownership illegal / jail */
-  S(394.2, 398.71, (ctx, s) => {
-    CC.bg(ctx, PAL.slateDk, { floor: FL, floorCol: PAL.greyDk });
-    CC.obj(ctx, s, { x: 960, y: 520, in: 'none' }, c => P.bars(c, 0, 0, { w: 700, h: 500 }));
-    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, pose: 'face', expr: 'worried' }, [
-      { at: 0.5, pose: 'slump', fx: 'sweat' }
-    ]);
-    CC.callout(ctx, 'EXECUTIVE ORDER 6102', 960, 160, s.lt, 0.4, { size: 68 });
-  });
-
-  /* 93 ─ 398.71–401.88  Clause: "So he decided to take the silver complet..." */
-  S(398.71, 401.88, (ctx, s) => {
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THEY DID NOT WANT PAPER CASH.", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(368.46, 368.66, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THEY WANTED THE METAL.", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 0.20), sfx: [[0.15, 'whoosh']] });
+  S(368.66, 370.87, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "WHEN THEIR CONTRACTS EXPIRED, ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.21), sfx: [[0.15, 'whoosh']] });
+  S(370.87, 372.91, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "WHEN THEIR CONTRACTS EXPIRED, ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(372.91, 374.84, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THEY DEMANDED PHYSICAL DELIVER", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.93), sfx: [[0.15, 'whoosh']] });
+  S(374.84, 376.61, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THEY TOLD THE EXCHANGE: DO NOT", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.77), sfx: [[0.15, 'whoosh']] });
+  S(376.61, 378.25, (ctx, s) => {
+    CC.bg(ctx, PAL.sky, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THEY TOLD THE EXCHANGE: DO NOT", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(378.25, 381.98, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "SUDDENLY, ARMORED TRUCKS BEGAN", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.73), sfx: [[0.15, 'whoosh']] });
+  S(381.98, 385.42, (ctx, s) => {
     CC.bg(ctx, PAL.beige, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'present', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "SO HE DECIDED TO TAKE THE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 94 ─ 401.88–403.26  Clause: "In the dead of winter, under the cover o..." */
-  S(401.88, 403.26, (ctx, s) => {
+    CC.actor(ctx, s, 'reporter', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "SUDDENLY, ARMORED TRUCKS BEGAN", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(385.42, 388.09, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "LOADING UP THOUSANDS OF HEAVY ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.67), sfx: [[0.15, 'whoosh']] });
+  S(388.09, 390.55, (ctx, s) => {
     CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "IN THE DEAD OF WINTER, UN", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 95 ─ 403.26–405.76  Boeing 707 midnight airlift */
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "LOADING UP THOUSANDS OF HEAVY ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(390.55, 392.45, (ctx, s) => {
+    CC.bg(ctx, PAL.sky, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUT BUNKER HUNT WAS TERRIFIED ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.90), sfx: [[0.15, 'whoosh']] });
+  S(392.45, 394.2, (ctx, s) => {
+    CC.bg(ctx, PAL.sage, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "BUT BUNKER HUNT WAS TERRIFIED ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(394.2, 396.55, (ctx, s) => {
+    CC.bg(ctx, PAL.beige, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "JUST LIKE ROOSEVELT HAD SEIZED", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.35), sfx: [[0.15, 'whoosh']] });
+  S(396.55, 398.71, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "JUST LIKE ROOSEVELT HAD SEIZED", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(398.71, 401.88, (ctx, s) => {
+    CC.bg(ctx, PAL.paper, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "SO HE DECIDED TO TAKE THE SILV", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.17), sfx: [[0.15, 'whoosh']] });
+  S(401.88, 403.26, (ctx, s) => {
+    CC.bg(ctx, PAL.sage, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "IN THE DEAD OF WINTER, UNDER T", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.38), sfx: [[0.15, 'whoosh']] });
   S(403.26, 405.76, (ctx, s) => {
     CC.bg(ctx, PAL.navy, { floor: FL, floorCol: PAL.slateDk });
-    CC.actor(ctx, s, 'worker', { x: 480, y: FL, hat: 'cap', expr: 'neutral' }, [
-      { at: 0.3, pose: 'carry' }
-    ]);
-    CC.obj(ctx, s, { x: 1100, y: 440, at: 0.2, in: 'slide-right', from: -300 }, c => {
-      CC.rect(c, -300, -90, 600, 180, PAL.grey, 8, 16);
-      CC.text(c, 'BOEING 707 CARGO', 0, 0, 50, PAL.white, { font: 'PMarker' });
+    CC.obj(ctx, s, { x: 1000, y: 400, at: 0.1, in: 'slide-right', from: -400 }, c => {
+      CC.rect(c, -340, -100, 680, 200, PAL.grey, 8, 18);
+      CC.text(c, 'BOEING 707 CARGO', 0, 0, 54, PAL.white, { font: 'PMarker' });
     });
-    CC.stamp(ctx, s, 'TO SWITZERLAND', 960, 200, 0.7, { col: PAL.gold, size: 84 });
-  });
-
-  /* 96 ─ 405.76–412.45  Boeing 707 midnight airlift */
-  S(405.76, 412.45, (ctx, s) => {
-    CC.bg(ctx, PAL.navy, { floor: FL, floorCol: PAL.slateDk });
-    CC.actor(ctx, s, 'worker', { x: 480, y: FL, hat: 'cap', expr: 'neutral' }, [
-      { at: 0.3, pose: 'carry' }
-    ]);
-    CC.obj(ctx, s, { x: 1100, y: 440, at: 0.2, in: 'slide-right', from: -300 }, c => {
-      CC.rect(c, -300, -90, 600, 180, PAL.grey, 8, 16);
-      CC.text(c, 'BOEING 707 CARGO', 0, 0, 50, PAL.white, { font: 'PMarker' });
-    });
-    CC.stamp(ctx, s, 'TO SWITZERLAND', 960, 200, 0.7, { col: PAL.gold, size: 84 });
-  });
-
-  /* 97 ─ 412.45–415.13  Clause: "to guard the loading docks...." */
-  S(412.45, 415.13, (ctx, s) => {
+    CC.actor(ctx, s, 'worker', { x: 420, y: FL, hat: 'cap', expr: 'neutral' }, [{ at: 0.3, pose: 'carry' }]);
+  }, { cam: CC.cam.zoom(1.15), sfx: [[0.1, 'whoosh']] });
+  S(405.76, 409.24, (ctx, s) => {
     CC.bg(ctx, PAL.slate, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "TO GUARD THE LOADING DOCK", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 98 ─ 415.13–417.2  Clause: "Pallet after pallet of solid silver bull..." */
-  S(415.13, 417.2, (ctx, s) => {
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "HE HIRED A SQUAD OF ARMED TEXA", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.48), sfx: [[0.15, 'whoosh']] });
+  S(409.24, 412.45, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "HE HIRED A SQUAD OF ARMED TEXA", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(412.45, 415.13, (ctx, s) => {
     CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "PALLET AFTER PALLET OF SO", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 99 ─ 417.2–423.23  Clause: "The jets took off into the night and fle..." */
-  S(417.2, 423.23, (ctx, s) => {
-    CC.bg(ctx, PAL.sky, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'present', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THE JETS TOOK OFF INTO TH", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 100 ─ 423.23–424.19  Boeing 707 midnight airlift */
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "TO GUARD THE LOADING DOCKS.", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.68), sfx: [[0.15, 'whoosh']] });
+  S(415.13, 417.2, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "PALLET AFTER PALLET OF SOLID S", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.07), sfx: [[0.15, 'whoosh']] });
+  S(417.2, 420.34, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE JETS TOOK OFF INTO THE NIG", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.14), sfx: [[0.15, 'whoosh']] });
+  S(420.34, 423.23, (ctx, s) => {
+    CC.bg(ctx, PAL.beige, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THE JETS TOOK OFF INTO THE NIG", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
   S(423.23, 424.19, (ctx, s) => {
     CC.bg(ctx, PAL.navy, { floor: FL, floorCol: PAL.slateDk });
-    CC.actor(ctx, s, 'worker', { x: 480, y: FL, hat: 'cap', expr: 'neutral' }, [
-      { at: 0.3, pose: 'carry' }
-    ]);
-    CC.obj(ctx, s, { x: 1100, y: 440, at: 0.2, in: 'slide-right', from: -300 }, c => {
-      CC.rect(c, -300, -90, 600, 180, PAL.grey, 8, 16);
-      CC.text(c, 'BOEING 707 CARGO', 0, 0, 50, PAL.white, { font: 'PMarker' });
+    CC.obj(ctx, s, { x: 1000, y: 400, at: 0.1, in: 'slide-right', from: -400 }, c => {
+      CC.rect(c, -340, -100, 680, 200, PAL.grey, 8, 18);
+      CC.text(c, 'BOEING 707 CARGO', 0, 0, 54, PAL.white, { font: 'PMarker' });
     });
-    CC.stamp(ctx, s, 'TO SWITZERLAND', 960, 200, 0.7, { col: PAL.gold, size: 84 });
-  });
-
-  /* 101 ─ 424.19–429.08  Boeing 707 midnight airlift */
-  S(424.19, 429.08, (ctx, s) => {
+    CC.actor(ctx, s, 'worker', { x: 420, y: FL, hat: 'cap', expr: 'neutral' }, [{ at: 0.3, pose: 'carry' }]);
+  }, { cam: CC.cam.zoom(1.15), sfx: [[0.1, 'whoosh']] });
+  S(424.19, 426.73, (ctx, s) => {
     CC.bg(ctx, PAL.navy, { floor: FL, floorCol: PAL.slateDk });
-    CC.actor(ctx, s, 'worker', { x: 480, y: FL, hat: 'cap', expr: 'neutral' }, [
-      { at: 0.3, pose: 'carry' }
-    ]);
-    CC.obj(ctx, s, { x: 1100, y: 440, at: 0.2, in: 'slide-right', from: -300 }, c => {
-      CC.rect(c, -300, -90, 600, 180, PAL.grey, 8, 16);
-      CC.text(c, 'BOEING 707 CARGO', 0, 0, 50, PAL.white, { font: 'PMarker' });
+    CC.obj(ctx, s, { x: 1000, y: 400, at: 0.1, in: 'slide-right', from: -400 }, c => {
+      CC.rect(c, -340, -100, 680, 200, PAL.grey, 8, 18);
+      CC.text(c, 'BOEING 707 CARGO', 0, 0, 54, PAL.white, { font: 'PMarker' });
     });
-    CC.stamp(ctx, s, 'TO SWITZERLAND', 960, 200, 0.7, { col: PAL.gold, size: 84 });
-  });
-
-  /* 102 ─ 429.08–433.15  Saudi alliance / handshake */
-  S(429.08, 433.15, (ctx, s) => {
-    CC.bg(ctx, PAL.tan, { floor: FL, floorCol: PAL.tanDk });
-    bunker(ctx, s, { x: 620, y: FL, pose: 'give', expr: 'smug' }, [
-      { at: 0.4, pose: 'wave', expr: 'happy' }
-    ]);
-    CC.actor(ctx, s, 'tycoon', { x: 1300, y: FL, robe: true, hair: 'none', expr: 'confident' }, [
-      { at: 0.2, slideIn: 'right', dur: 0.5 }, { at: 0.7, pose: 'point' }
-    ]);
-    CC.callout(ctx, 'PETRODOLLAR ALLIANCE', 960, 240, s.lt, 0.5, { size: 76 });
-  });
-
-  /* 103 ─ 433.15–434.9  Clause: "They were using leverage...." */
+    CC.actor(ctx, s, 'worker', { x: 420, y: FL, hat: 'cap', expr: 'neutral' }, [{ at: 0.3, pose: 'carry' }]);
+  }, { cam: CC.cam.zoom(1.15), sfx: [[0.1, 'whoosh']] });
+  S(426.73, 429.08, (ctx, s) => {
+    CC.bg(ctx, PAL.slateDk, { floor: FL });
+    P.bank(ctx, 960, FL, { s: 1.25, label: 'SWISS VAULT' });
+    CC.stamp(ctx, s, 'ZURICH SECURED', 960, 260, 0.3, { col: PAL.gold, size: 85 });
+  }, { cam: CC.cam.punch(960, 260, 1.3, 0.3), sfx: [[0.3, 'stamp']] });
+  S(429.08, 431.2, (ctx, s) => {
+    CC.bg(ctx, PAL.beige, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BY NINETEEN SEVENTY-NINE, THE ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.12), sfx: [[0.15, 'whoosh']] });
+  S(431.2, 433.15, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "BY NINETEEN SEVENTY-NINE, THE ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
   S(433.15, 434.9, (ctx, s) => {
+    CC.bg(ctx, PAL.paper, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THEY WERE USING LEVERAGE.", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.75), sfx: [[0.15, 'whoosh']] });
+  S(434.9, 438.03, (ctx, s) => {
+    CC.bg(ctx, PAL.sage, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THEY WOULD TAKE THEIR PHYSICAL", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.13), sfx: [[0.15, 'whoosh']] });
+  S(438.03, 440.92, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THEY WOULD TAKE THEIR PHYSICAL", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(440.92, 443.95, (ctx, s) => {
     CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THEY WERE USING LEVERAGE.", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 104 ─ 434.9–440.92  Clause: "They would take their physical silver ba..." */
-  S(434.9, 440.92, (ctx, s) => {
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "AND THEN USE THAT BORROWED CAS", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.03), sfx: [[0.15, 'whoosh']] });
+  S(443.95, 446.75, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "AND THEN USE THAT BORROWED CAS", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(446.75, 448.64, (ctx, s) => {
     CC.bg(ctx, PAL.slate, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THEY WOULD TAKE THEIR PHY", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 105 ─ 440.92–446.75  Clause: "and then use that borrowed cash to buy e..." */
-  S(440.92, 446.75, (ctx, s) => {
-    CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'present', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "AND THEN USE THAT BORROWE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 106 ─ 446.75–450.38  Clause: "It was an unstoppable compounding loop...." */
-  S(446.75, 450.38, (ctx, s) => {
-    CC.bg(ctx, PAL.sky, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "IT WAS AN UNSTOPPABLE COM", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 107 ─ 450.38–453.37  Clause: "By late nineteen seventy-nine, the Hunt ..." */
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "IT WAS AN UNSTOPPABLE COMPOUND", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.89), sfx: [[0.15, 'whoosh']] });
+  S(448.64, 450.38, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "IT WAS AN UNSTOPPABLE COMPOUND", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
   S(450.38, 453.37, (ctx, s) => {
-    CC.bg(ctx, PAL.beige, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BY LATE NINETEEN SEVENTY-", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 108 ─ 453.37–459.47  Clause: "That was roughly half of all the deliver..." */
-  S(453.37, 459.47, (ctx, s) => {
-    CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THAT WAS ROUGHLY HALF OF ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 109 ─ 459.47–464.31  Chapter Card: The Silver Fever of 1980 */
-  S(459.47, 464.31, (ctx, s) => {
-    CC.chapter(ctx, s, "The Silver Fever of 1980", { kicker: "CHAPTER FOUR", at: 0.1, dur: 1.20 });
-  }, { fadeIn: 0.15, fadeOut: 0.15 });
-
-  /* 110 ─ 464.31–467.12  Clause: "the open market suddenly experienced an ..." */
-  S(464.31, 467.12, (ctx, s) => {
-    CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THE OPEN MARKET SUDDENLY ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 111 ─ 467.12–472.61  Industrial silver demand */
-  S(467.12, 472.61, (ctx, s) => {
     CC.bg(ctx, PAL.skyLt, { floor: FL });
-    P.computer(ctx, 640, FL, { s: 1.4, screen: PAL.slate });
-    CC.obj(ctx, s, { x: 1280, y: 520, at: 0.3, in: 'pop' }, c => {
-      CC.rect(c, -160, -120, 320, 240, PAL.yellow, 6, 8);
-      CC.text(c, 'KODAK FILM', 0, 0, 44, PAL.black, { font: 'PMarker' });
-    });
-    CC.stamp(ctx, s, 'SUPPLY DEFICIT', 960, 220, 0.7, { col: PAL.red, size: 85 });
-  });
-
-  /* 112 ─ 472.61–476.84  Clause: "The price of silver went completely bers..." */
-  S(472.61, 476.84, (ctx, s) => {
-    CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THE PRICE OF SILVER WENT ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 113 ─ 476.84–479.61  Clause: "In January of nineteen seventy-nine, sil..." */
-  S(476.84, 479.61, (ctx, s) => {
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BY LATE NINETEEN SEVENTY-NINE,", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.99), sfx: [[0.15, 'whoosh']] });
+  S(453.37, 456.54, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THAT WAS ROUGHLY HALF OF ALL T", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.17), sfx: [[0.15, 'whoosh']] });
+  S(456.54, 459.47, (ctx, s) => {
     CC.bg(ctx, PAL.sky, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "IN JANUARY OF NINETEEN SE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 114 ─ 479.61–482.73  Clause: "By September, it hit eleven dollars...." */
-  S(479.61, 482.73, (ctx, s) => {
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THAT WAS ROUGHLY HALF OF ALL T", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  /* CH 4 */ S(459.47, 464.31, (ctx, s) => CC.chapter(ctx, s, "The Silver Fever of 1980", { kicker: "CHAPTER FOUR", at: 0.1, dur: 1.0 }), { cam: CC.cam.punch(960, 540, 1.1, 0.1), sfx: [[0.1, 'thud']] });
+  S(464.31, 467.12, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE OPEN MARKET SUDDENLY EXPER", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.81), sfx: [[0.15, 'whoosh']] });
+  S(467.12, 469.97, (ctx, s) => {
+    CC.bg(ctx, PAL.sky, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "INDUSTRIAL COMPANIES THAT DESP", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.85), sfx: [[0.15, 'whoosh']] });
+  S(469.97, 472.61, (ctx, s) => {
+    CC.bg(ctx, PAL.sage, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "INDUSTRIAL COMPANIES THAT DESP", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(472.61, 474.81, (ctx, s) => {
     CC.bg(ctx, PAL.beige, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BY SEPTEMBER, IT HIT ELEV", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 115 ─ 482.73–484.8  Clause: "By December, it blew past twenty-five do..." */
-  S(482.73, 484.8, (ctx, s) => {
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE PRICE OF SILVER WENT COMPL", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.20), sfx: [[0.15, 'whoosh']] });
+  S(474.81, 476.84, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THE PRICE OF SILVER WENT COMPL", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(476.84, 479.61, (ctx, s) => {
     CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BY DECEMBER, IT BLEW PAST", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 116 ─ 484.8–490.9  Peak $50.35 record */
-  S(484.8, 490.9, (ctx, s) => {
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "IN JANUARY OF NINETEEN SEVENTY", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.77), sfx: [[0.15, 'whoosh']] });
+  S(479.61, 482.73, (ctx, s) => {
+    CC.bg(ctx, PAL.sage, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BY SEPTEMBER, IT HIT ELEVEN DO", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.12), sfx: [[0.15, 'whoosh']] });
+  S(482.73, 484.8, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BY DECEMBER, IT BLEW PAST TWEN", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.07), sfx: [[0.15, 'whoosh']] });
+  S(484.8, 487.97, (ctx, s) => {
     CC.bg(ctx, PAL.sage, { floor: FL, floorCol: PAL.sageDk });
-    CC.word(ctx, '$50.35 / OZ', 960, 320, 130, PAL.moneyDk, s.lt, 0.2);
-    bunker(ctx, s, { x: 960, y: FL, expr: 'joy' }, [
-      { at: 0.3, pose: 'cheer', expr: 'grin' }
-    ]);
-    CC.callout(ctx, 'JANUARY 18, 1980', 960, 150, s.lt, 0.6, { size: 72 });
-  }, { cam: CC.cam.punch(960, 480, 1.3, 0.4) });
-
-  /* 117 ─ 490.9–500.64  Peak $50.35 record */
-  S(490.9, 500.64, (ctx, s) => {
+    CC.word(ctx, '$50.35 / OZ', 960, 320, 135, PAL.moneyDk, s.lt, 0.15);
+    bunker(ctx, s, { x: 960, y: FL, expr: 'joy' }, [{ at: 0.2, pose: 'cheer', expr: 'grin' }]);
+    CC.callout(ctx, 'JANUARY 18, 1980', 960, 150, s.lt, 0.4, { size: 75 });
+  }, { cam: CC.cam.punch(960, 480, 1.35, 0.3), sfx: [[0.3, 'ding']] });
+  S(487.97, 490.9, (ctx, s) => {
+    CC.bg(ctx, PAL.gold, { floor: FL });
+    CC.rain(ctx, s, 'coin', { n: 16, speed: 500 });
+    bunker(ctx, s, { x: 960, y: FL, s: 1.8, expr: 'joy' }, [{ at: 0.2, pose: 'thumbsUp' }]);
+    CC.stamp(ctx, s, 'PEAK BILLIONS', 960, 250, 0.3, { col: PAL.red, size: 90 });
+  }, { cam: CC.cam.zoom(1.15), sfx: [[0.1, 'clink']] });
+  S(490.9, 495.96, (ctx, s) => {
     CC.bg(ctx, PAL.sage, { floor: FL, floorCol: PAL.sageDk });
-    CC.word(ctx, '$50.35 / OZ', 960, 320, 130, PAL.moneyDk, s.lt, 0.2);
-    bunker(ctx, s, { x: 960, y: FL, expr: 'joy' }, [
-      { at: 0.3, pose: 'cheer', expr: 'grin' }
-    ]);
-    CC.callout(ctx, 'JANUARY 18, 1980', 960, 150, s.lt, 0.6, { size: 72 });
-  }, { cam: CC.cam.punch(960, 480, 1.3, 0.4) });
-
-  /* 118 ─ 500.64–503.14  Rocket chart +700% */
+    CC.word(ctx, '$50.35 / OZ', 960, 320, 135, PAL.moneyDk, s.lt, 0.15);
+    bunker(ctx, s, { x: 960, y: FL, expr: 'joy' }, [{ at: 0.2, pose: 'cheer', expr: 'grin' }]);
+    CC.callout(ctx, 'JANUARY 18, 1980', 960, 150, s.lt, 0.4, { size: 75 });
+  }, { cam: CC.cam.punch(960, 480, 1.35, 0.3), sfx: [[0.3, 'ding']] });
+  S(495.96, 500.64, (ctx, s) => {
+    CC.bg(ctx, PAL.gold, { floor: FL });
+    CC.rain(ctx, s, 'coin', { n: 16, speed: 500 });
+    bunker(ctx, s, { x: 960, y: FL, s: 1.8, expr: 'joy' }, [{ at: 0.2, pose: 'thumbsUp' }]);
+    CC.stamp(ctx, s, 'PEAK BILLIONS', 960, 250, 0.3, { col: PAL.red, size: 90 });
+  }, { cam: CC.cam.zoom(1.15), sfx: [[0.1, 'clink']] });
   S(500.64, 503.14, (ctx, s) => {
     CC.bg(ctx, PAL.beige, { floor: FL });
-    P.lineChart(ctx, 480, 260, 960, 480, [[0, 0.1], [0.3, 0.18], [0.6, 0.45], [0.9, 0.95]], CC.prog(CC.q(s.lt), 0.2, 1.2), { col: PAL.green, lw: 9 });
-    CC.stamp(ctx, s, '+700%', 1200, 380, 0.7, { col: PAL.red, size: 110 });
-    CC.actor(ctx, s, 'analyst', { x: 340, y: FL, pose: 'think', expr: 'shock' }, [
-      { at: 0.5, pose: 'face', fx: 'sweat' }
-    ]);
-  });
-
-  /* 119 ─ 503.14–509.36  Clause: "On paper, Bunker and Herbert Hunt were n..." */
-  S(503.14, 509.36, (ctx, s) => {
-    CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "ON PAPER, BUNKER AND HERB", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 120 ─ 509.36–512.8  Clause: "They were, for a few brief weeks, arguab..." */
-  S(509.36, 512.8, (ctx, s) => {
-    CC.bg(ctx, PAL.sky, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THEY WERE, FOR A FEW BRIE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 121 ─ 512.8–518.68  Clause: "Across the United States, regular citize..." */
-  S(512.8, 518.68, (ctx, s) => {
+    P.lineChart(ctx, 450, 250, 1020, 500, [[0, 0.1], [0.3, 0.2], [0.6, 0.5], [0.9, 0.98]], CC.prog(CC.q(s.lt), 0.1, 0.8), { col: PAL.greenDk, lw: 10 });
+    CC.stamp(ctx, s, '+700%', 1250, 360, 0.5, { col: PAL.red, size: 120 });
+  }, { cam: CC.cam.punch(1250, 360, 1.35, 0.5), sfx: [[0.5, 'stamp']] });
+  S(503.14, 506.37, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "ON PAPER, BUNKER AND HERBERT H", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.23), sfx: [[0.15, 'whoosh']] });
+  S(506.37, 509.36, (ctx, s) => {
     CC.bg(ctx, PAL.beige, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "ACROSS THE UNITED STATES,", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 122 ─ 518.68–528.83  Clause: "People suddenly realized that the dusty ..." */
-  S(518.68, 528.83, (ctx, s) => {
+    CC.actor(ctx, s, 'reporter', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "ON PAPER, BUNKER AND HERBERT H", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(509.36, 511.15, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THEY WERE, FOR A FEW BRIEF WEE", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.79), sfx: [[0.15, 'whoosh']] });
+  S(511.15, 512.8, (ctx, s) => {
     CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "PEOPLE SUDDENLY REALIZED ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 123 ─ 528.83–537.08  Clause: "Lines stretched around the block outside..." */
-  S(528.83, 537.08, (ctx, s) => {
-    CC.bg(ctx, PAL.sage, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'present', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "LINES STRETCHED AROUND TH", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 124 ─ 537.08–540.68  Clause: "People stood in the freezing winter cold..." */
-  S(537.08, 540.68, (ctx, s) => {
-    CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "PEOPLE STOOD IN THE FREEZ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 125 ─ 540.68–546.2  Clause: "communion plates, and even silver dental..." */
-  S(540.68, 546.2, (ctx, s) => {
-    CC.bg(ctx, PAL.slate, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "COMMUNION PLATES, AND EVE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 126 ─ 546.2–553.49  Clause: "Refineries worked around the clock, melt..." */
-  S(546.2, 553.49, (ctx, s) => {
-    CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "REFINERIES WORKED AROUND ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 127 ─ 553.49–560.11  Clause: "Burglars began breaking into suburban ho..." */
-  S(553.49, 560.11, (ctx, s) => {
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THEY WERE, FOR A FEW BRIEF WEE", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(512.8, 515.86, (ctx, s) => {
     CC.bg(ctx, PAL.sky, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BURGLARS BEGAN BREAKING I", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 128 ─ 560.11–562.47  Clause: "and heading straight for the dining room..." */
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "ACROSS THE UNITED STATES, REGU", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.06), sfx: [[0.15, 'whoosh']] });
+  S(515.86, 518.68, (ctx, s) => {
+    CC.bg(ctx, PAL.sage, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "ACROSS THE UNITED STATES, REGU", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(518.68, 523.96, (ctx, s) => {
+    CC.bg(ctx, PAL.beige, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "PEOPLE SUDDENLY REALIZED THAT ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 5.28), sfx: [[0.15, 'whoosh']] });
+  S(523.96, 528.83, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "PEOPLE SUDDENLY REALIZED THAT ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(528.83, 533.12, (ctx, s) => {
+    CC.bg(ctx, PAL.paper, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "LINES STRETCHED AROUND THE BLO", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 4.29), sfx: [[0.15, 'whoosh']] });
+  S(533.12, 537.08, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "LINES STRETCHED AROUND THE BLO", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(537.08, 538.95, (ctx, s) => {
+    CC.bg(ctx, PAL.sage, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "PEOPLE STOOD IN THE FREEZING W", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.87), sfx: [[0.15, 'whoosh']] });
+  S(538.95, 540.68, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "PEOPLE STOOD IN THE FREEZING W", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(540.68, 543.55, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "COMMUNION PLATES, AND EVEN SIL", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.87), sfx: [[0.15, 'whoosh']] });
+  S(543.55, 546.2, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "COMMUNION PLATES, AND EVEN SIL", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(546.2, 549.99, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "REFINERIES WORKED AROUND THE C", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.79), sfx: [[0.15, 'whoosh']] });
+  S(549.99, 553.49, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "REFINERIES WORKED AROUND THE C", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(553.49, 556.93, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BURGLARS BEGAN BREAKING INTO S", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.44), sfx: [[0.15, 'whoosh']] });
+  S(556.93, 560.11, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "BURGLARS BEGAN BREAKING INTO S", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
   S(560.11, 562.47, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "AND HEADING STRAIGHT FOR THE D", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.36), sfx: [[0.15, 'whoosh']] });
+  S(562.47, 567.36, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE ICONIC LUXURY JEWELER TIFF", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 4.89), sfx: [[0.15, 'whoosh']] });
+  S(567.36, 571.88, (ctx, s) => {
     CC.bg(ctx, PAL.beige, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "AND HEADING STRAIGHT FOR ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 129 ─ 562.47–571.88  Tiffany & Co. New York Times ad */
-  S(562.47, 571.88, (ctx, s) => {
+    CC.actor(ctx, s, 'analyst', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THE ICONIC LUXURY JEWELER TIFF", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(571.88, 575.96, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE AD PUBLICLY BLASTED THE HU", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 4.08), sfx: [[0.15, 'whoosh']] });
+  S(575.96, 579.73, (ctx, s) => {
     CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.obj(ctx, s, { x: 960, y: 500, at: 0.2, in: 'pop' }, c => {
-      P.newspaper(ctx, 0, 0, { headline: 'TIFFANY & CO: UNCONSCIONABLE' });
-    });
-    CC.actor(ctx, s, 'reporter', { x: 420, y: FL, pose: 'point', expr: 'shock' }, [
-      { at: 0.4, pose: 'write' }
-    ]);
-  });
-
-  /* 130 ─ 571.88–579.73  Tiffany & Co. New York Times ad */
-  S(571.88, 579.73, (ctx, s) => {
-    CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.obj(ctx, s, { x: 960, y: 500, at: 0.2, in: 'pop' }, c => {
-      P.newspaper(ctx, 0, 0, { headline: 'TIFFANY & CO: UNCONSCIONABLE' });
-    });
-    CC.actor(ctx, s, 'reporter', { x: 420, y: FL, pose: 'point', expr: 'shock' }, [
-      { at: 0.4, pose: 'write' }
-    ]);
-  });
-
-  /* 131 ─ 579.73–585.01  Clause: "But Bunker Hunt simply laughed off the c..." */
-  S(579.73, 585.01, (ctx, s) => {
+    CC.actor(ctx, s, 'worker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THE AD PUBLICLY BLASTED THE HU", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(579.73, 582.48, (ctx, s) => {
+    CC.bg(ctx, PAL.sky, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUT BUNKER HUNT SIMPLY LAUGHED", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.75), sfx: [[0.15, 'whoosh']] });
+  S(582.48, 585.01, (ctx, s) => {
+    CC.bg(ctx, PAL.sage, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "BUT BUNKER HUNT SIMPLY LAUGHED", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(585.01, 586.77, (ctx, s) => {
+    CC.bg(ctx, PAL.beige, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "WHEN A REPORTER ASKED HIM HOW ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.76), sfx: [[0.15, 'whoosh']] });
+  S(586.77, 588.39, (ctx, s) => {
     CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BUT BUNKER HUNT SIMPLY LA", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 132 ─ 585.01–588.39  Clause: "When a reporter asked him how it felt to..." */
-  S(585.01, 588.39, (ctx, s) => {
-    CC.bg(ctx, PAL.slate, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "WHEN A REPORTER ASKED HIM", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 133 ─ 588.39–591.83  Clause: "Bunker calmly replied that a billion dol..." */
-  S(588.39, 591.83, (ctx, s) => {
-    CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BUNKER CALMLY REPLIED THA", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 134 ─ 591.83–598.98  Chapter Card: Changing the Rules */
-  S(591.83, 598.98, (ctx, s) => {
-    CC.chapter(ctx, s, "Changing the Rules", { kicker: "CHAPTER FIVE", at: 0.1, dur: 1.20 });
-  }, { fadeIn: 0.15, fadeOut: 0.15 });
-
-  /* 135 ─ 598.98–607.06  Clause: "The leaders of the Chicago Board of Trad..." */
-  S(598.98, 607.06, (ctx, s) => {
-    CC.bg(ctx, PAL.beige, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'present', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THE LEADERS OF THE CHICAG", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 136 ─ 607.06–614.33  Clause: "Many of the exchange board members and m..." */
-  S(607.06, 614.33, (ctx, s) => {
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "WHEN A REPORTER ASKED HIM HOW ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(588.39, 590.18, (ctx, s) => {
     CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "MANY OF THE EXCHANGE BOAR", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 137 ─ 614.33–617.43  Clause: "meaning they had bet that the price of s..." */
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUNKER CALMLY REPLIED THAT A B", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.79), sfx: [[0.15, 'whoosh']] });
+  S(590.18, 591.83, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "BUNKER CALMLY REPLIED THAT A B", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  /* CH 5 */ S(591.83, 598.98, (ctx, s) => CC.chapter(ctx, s, "Changing the Rules", { kicker: "CHAPTER FIVE", at: 0.1, dur: 1.0 }), { cam: CC.cam.punch(960, 540, 1.1, 0.1), sfx: [[0.1, 'thud']] });
+  S(598.98, 603.18, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE LEADERS OF THE CHICAGO BOA", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 4.20), sfx: [[0.15, 'whoosh']] });
+  S(603.18, 607.06, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THE LEADERS OF THE CHICAGO BOA", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(607.06, 610.84, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "MANY OF THE EXCHANGE BOARD MEM", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.78), sfx: [[0.15, 'whoosh']] });
+  S(610.84, 614.33, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "MANY OF THE EXCHANGE BOARD MEM", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
   S(614.33, 617.43, (ctx, s) => {
-    CC.bg(ctx, PAL.sage, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "MEANING THEY HAD BET THAT", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 138 ─ 617.43–624.62  Clause: "If the Hunts continued demanding physica..." */
-  S(617.43, 624.62, (ctx, s) => {
-    CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "IF THE HUNTS CONTINUED DE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 139 ─ 624.62–631.29  Clause: "The short sellers would go bankrupt, cle..." */
-  S(624.62, 631.29, (ctx, s) => {
-    CC.bg(ctx, PAL.slate, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THE SHORT SELLERS WOULD G", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 140 ─ 631.29–635.38  Clause: "So the men in charge decided to do the o..." */
-  S(631.29, 635.38, (ctx, s) => {
     CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "SO THE MEN IN CHARGE DECI", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 141 ─ 635.38–638.86  The Rule Change slam */
-  S(635.38, 638.86, (ctx, s) => {
-    CC.spot(ctx, 960, FL, { w: 500 });
-    CC.stamp(ctx, s, 'RULE CHANGE', 960, 480, 0.3, { col: PAL.red, size: 85 });
-    bunker(ctx, s, { x: 450, y: FL, expr: 'shock' }, [
-      { at: 0.3, collapse: 'left', fx: 'sweat' }
-    ]);
-  }, { sfx: [[0.3, 'stamp']] });
-
-  /* 142 ─ 638.86–643.08  Clause: "First, the exchanges dramatically increa..." */
-  S(638.86, 643.08, (ctx, s) => {
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "MEANING THEY HAD BET THAT THE ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.10), sfx: [[0.15, 'whoosh']] });
+  S(617.43, 621.17, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "IF THE HUNTS CONTINUED DEMANDI", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.74), sfx: [[0.15, 'whoosh']] });
+  S(621.17, 624.62, (ctx, s) => {
+    CC.bg(ctx, PAL.sky, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "IF THE HUNTS CONTINUED DEMANDI", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(624.62, 628.09, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE SHORT SELLERS WOULD GO BAN", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.47), sfx: [[0.15, 'whoosh']] });
+  S(628.09, 631.29, (ctx, s) => {
     CC.bg(ctx, PAL.beige, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "FIRST, THE EXCHANGES DRAM", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 143 ─ 643.08–650.36  Clause: "Previously, an investor only needed to p..." */
-  S(643.08, 650.36, (ctx, s) => {
+    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THE SHORT SELLERS WOULD GO BAN", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(631.29, 633.42, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "SO THE MEN IN CHARGE DECIDED T", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.13), sfx: [[0.15, 'whoosh']] });
+  S(633.42, 635.38, (ctx, s) => {
     CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "PREVIOUSLY, AN INVESTOR O", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 144 ─ 650.36–656.67  Clause: "The exchanges suddenly demanded that tra..." */
-  S(650.36, 656.67, (ctx, s) => {
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "SO THE MEN IN CHARGE DECIDED T", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(635.38, 637.19, (ctx, s) => {
+    CC.spot(ctx, 960, FL, { w: 550 });
+    CC.stamp(ctx, s, 'RULE CHANGE', 960, 460, 0.2, { col: PAL.red, size: 95 });
+    bunker(ctx, s, { x: 450, y: FL, expr: 'shock' }, [{ at: 0.3, collapse: 'left', fx: 'sweat' }]);
+  }, { cam: CC.cam.punch(960, 460, 1.35, 0.2), sfx: [[0.2, 'stamp']] });
+  S(637.19, 638.86, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    judge(ctx, s, { x: 960, y: FL, s: 1.8, expr: 'angry' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, 'THE HOUSE WINS', 960, 240, 0.3, { col: PAL.white, size: 85 });
+  }, { cam: CC.cam.punch(960, 240, 1.25, 0.3), sfx: [[0.3, 'thud']] });
+  S(638.86, 641.05, (ctx, s) => {
+    CC.bg(ctx, PAL.beige, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "FIRST, THE EXCHANGES DRAMATICA", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.19), sfx: [[0.15, 'whoosh']] });
+  S(641.05, 643.08, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "FIRST, THE EXCHANGES DRAMATICA", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(643.08, 646.87, (ctx, s) => {
+    CC.bg(ctx, PAL.paper, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "PREVIOUSLY, AN INVESTOR ONLY N", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.79), sfx: [[0.15, 'whoosh']] });
+  S(646.87, 650.36, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "PREVIOUSLY, AN INVESTOR ONLY N", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(650.36, 653.64, (ctx, s) => {
     CC.bg(ctx, PAL.sage, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THE EXCHANGES SUDDENLY DE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 145 ─ 656.67–658.75  Clause: "Then came the kill shot...." */
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE EXCHANGES SUDDENLY DEMANDE", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.28), sfx: [[0.15, 'whoosh']] });
+  S(653.64, 656.67, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THE EXCHANGES SUDDENLY DEMANDE", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
   S(656.67, 658.75, (ctx, s) => {
     CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THEN CAME THE KILL SHOT.", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 146 ─ 658.75–663.78  Liquidation Only rule */
-  S(658.75, 663.78, (ctx, s) => {
-    CC.spot(ctx, 960, FL, { w: 600 });
-    CC.stamp(ctx, s, 'LIQUIDATION ONLY', 960, 450, 0.2, { col: PAL.red, size: 80 });
-    CC.actor(ctx, s, 'judge', { x: 480, y: FL, expr: 'angry' }, [
-      { at: 0.4, pose: 'pointUp' }
-    ]);
-  });
-
-  /* 147 ─ 663.78–669.02  Clause: "Under this new rule, nobody in the world..." */
-  S(663.78, 669.02, (ctx, s) => {
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THEN CAME THE KILL SHOT.", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.08), sfx: [[0.15, 'whoosh']] });
+  S(658.75, 661.37, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE EXCHANGES ENACTED A BRAND-", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.62), sfx: [[0.15, 'whoosh']] });
+  S(661.37, 663.78, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THE EXCHANGES ENACTED A BRAND-", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(663.78, 666.5, (ctx, s) => {
     CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'present', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "UNDER THIS NEW RULE, NOBO", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 148 ─ 669.02–673.08  Clause: "You were only allowed to sell existing c..." */
-  S(669.02, 673.08, (ctx, s) => {
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "UNDER THIS NEW RULE, NOBODY IN", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.72), sfx: [[0.15, 'whoosh']] });
+  S(666.5, 669.02, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "UNDER THIS NEW RULE, NOBODY IN", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(669.02, 671.13, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "YOU WERE ONLY ALLOWED TO SELL ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.11), sfx: [[0.15, 'whoosh']] });
+  S(671.13, 673.08, (ctx, s) => {
     CC.bg(ctx, PAL.sky, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "YOU WERE ONLY ALLOWED TO ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 149 ─ 673.08–673.28  Clause: "Think about that for a second...." */
+    CC.actor(ctx, s, 'worker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "YOU WERE ONLY ALLOWED TO SELL ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
   S(673.08, 673.28, (ctx, s) => {
-    CC.bg(ctx, PAL.beige, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THINK ABOUT THAT FOR A SE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 150 ─ 673.28–675.52  Liquidation Only rule */
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THINK ABOUT THAT FOR A SECOND.", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 0.20), sfx: [[0.15, 'whoosh']] });
   S(673.28, 675.52, (ctx, s) => {
-    CC.spot(ctx, 960, FL, { w: 600 });
-    CC.stamp(ctx, s, 'LIQUIDATION ONLY', 960, 450, 0.2, { col: PAL.red, size: 80 });
-    CC.actor(ctx, s, 'judge', { x: 480, y: FL, expr: 'angry' }, [
-      { at: 0.4, pose: 'pointUp' }
-    ]);
-  });
-
-  /* 151 ─ 675.52–679.11  Clause: "and sellers are only allowed to sell...." */
-  S(675.52, 679.11, (ctx, s) => {
-    CC.bg(ctx, PAL.sage, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "AND SELLERS ARE ONLY ALLO", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 152 ─ 679.11–683.64  Clause: "With buyers legally kicked out of the ro..." */
-  S(679.11, 683.64, (ctx, s) => {
-    CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "WITH BUYERS LEGALLY KICKE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 153 ─ 683.64–686.8  Paul Volcker shuts credit lines */
-  S(683.64, 686.8, (ctx, s) => {
-    CC.bg(ctx, PAL.slate, { floor: FL, floorCol: PAL.charcoal });
-    P.bank(ctx, 1340, FL, { s: 1.1, label: 'FED RESERVE' });
-    CC.actor(ctx, s, 'banker', { x: 620, y: FL, pose: 'cross', expr: 'furious' }, [
-      { at: 0.3, pose: 'point', expr: 'furious' }
-    ]);
-    CC.stamp(ctx, s, 'CREDIT SHUTDOWN', 960, 240, 0.6, { col: PAL.red, size: 84 });
-  });
-
-  /* 154 ─ 686.8–694.85  Paul Volcker shuts credit lines */
-  S(686.8, 694.85, (ctx, s) => {
-    CC.bg(ctx, PAL.slate, { floor: FL, floorCol: PAL.charcoal });
-    P.bank(ctx, 1340, FL, { s: 1.1, label: 'FED RESERVE' });
-    CC.actor(ctx, s, 'banker', { x: 620, y: FL, pose: 'cross', expr: 'furious' }, [
-      { at: 0.3, pose: 'point', expr: 'furious' }
-    ]);
-    CC.stamp(ctx, s, 'CREDIT SHUTDOWN', 960, 240, 0.6, { col: PAL.red, size: 84 });
-  });
-
-  /* 155 ─ 694.85–698.8  Clause: "He told them to immediately stop extendi..." */
-  S(694.85, 698.8, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "IMAGINE AN AUCTION HOUSE WHERE", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.24), sfx: [[0.15, 'whoosh']] });
+  S(675.52, 677.39, (ctx, s) => {
     CC.bg(ctx, PAL.sky, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "HE TOLD THEM TO IMMEDIATE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 156 ─ 698.8–704.24  Clause: "Overnight, the Hunt brothers' financial ..." */
-  S(698.8, 704.24, (ctx, s) => {
-    CC.bg(ctx, PAL.beige, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "OVERNIGHT, THE HUNT BROTH", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 157 ─ 704.24–708.69  Clause: "They could no longer borrow fresh cash a..." */
-  S(704.24, 708.69, (ctx, s) => {
-    CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THEY COULD NO LONGER BORR", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 158 ─ 708.69–711.91  Clause: "and the market they thought they control..." */
-  S(708.69, 711.91, (ctx, s) => {
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "AND SELLERS ARE ONLY ALLOWED T", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.87), sfx: [[0.15, 'whoosh']] });
+  S(677.39, 679.11, (ctx, s) => {
     CC.bg(ctx, PAL.sage, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "AND THE MARKET THEY THOUG", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 159 ─ 711.91–717.53  Chapter Card: Silver Thursday and the Fall */
-  S(711.91, 717.53, (ctx, s) => {
-    CC.chapter(ctx, s, "Silver Thursday and the Fall", { kicker: "CHAPTER SIX", at: 0.1, dur: 1.20 });
-  }, { fadeIn: 0.15, fadeOut: 0.15 });
-
-  /* 160 ─ 717.53–720.16  Peak $50.35 record */
+    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "AND SELLERS ARE ONLY ALLOWED T", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(679.11, 681.47, (ctx, s) => {
+    CC.bg(ctx, PAL.beige, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "WITH BUYERS LEGALLY KICKED OUT", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.36), sfx: [[0.15, 'whoosh']] });
+  S(681.47, 683.64, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "WITH BUYERS LEGALLY KICKED OUT", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(683.64, 686.8, (ctx, s) => {
+    CC.bg(ctx, PAL.paper, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "TO MAKE MATTERS WORSE, THE FED", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.16), sfx: [[0.15, 'whoosh']] });
+  S(686.8, 690.99, (ctx, s) => {
+    CC.bg(ctx, PAL.sage, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "CHAIRMAN PAUL VOLCKER, WHO WAS", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 4.19), sfx: [[0.15, 'whoosh']] });
+  S(690.99, 694.85, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "CHAIRMAN PAUL VOLCKER, WHO WAS", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(694.85, 696.9, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "HE TOLD THEM TO IMMEDIATELY ST", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.05), sfx: [[0.15, 'whoosh']] });
+  S(696.9, 698.8, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "HE TOLD THEM TO IMMEDIATELY ST", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(698.8, 701.63, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "OVERNIGHT, THE HUNT BROTHERS' ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.83), sfx: [[0.15, 'whoosh']] });
+  S(701.63, 704.24, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "OVERNIGHT, THE HUNT BROTHERS' ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(704.24, 706.55, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THEY COULD NO LONGER BORROW FR", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.31), sfx: [[0.15, 'whoosh']] });
+  S(706.55, 708.69, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THEY COULD NO LONGER BORROW FR", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(708.69, 710.36, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "AND THE MARKET THEY THOUGHT TH", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.67), sfx: [[0.15, 'whoosh']] });
+  S(710.36, 711.91, (ctx, s) => {
+    CC.bg(ctx, PAL.sky, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "AND THE MARKET THEY THOUGHT TH", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  /* CH 6 */ S(711.91, 717.53, (ctx, s) => CC.chapter(ctx, s, "Silver Thursday and the Fall", { kicker: "CHAPTER SIX", at: 0.1, dur: 1.0 }), { cam: CC.cam.punch(960, 540, 1.1, 0.1), sfx: [[0.1, 'thud']] });
   S(717.53, 720.16, (ctx, s) => {
     CC.bg(ctx, PAL.sage, { floor: FL, floorCol: PAL.sageDk });
-    CC.word(ctx, '$50.35 / OZ', 960, 320, 130, PAL.moneyDk, s.lt, 0.2);
-    bunker(ctx, s, { x: 960, y: FL, expr: 'joy' }, [
-      { at: 0.3, pose: 'cheer', expr: 'grin' }
-    ]);
-    CC.callout(ctx, 'JANUARY 18, 1980', 960, 150, s.lt, 0.6, { size: 72 });
-  }, { cam: CC.cam.punch(960, 480, 1.3, 0.4) });
-
-  /* 161 ─ 720.16–724.81  Clause: "Because the Hunt brothers had built thei..." */
-  S(720.16, 724.81, (ctx, s) => {
-    CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BECAUSE THE HUNT BROTHERS", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 162 ─ 724.81–730.07  Clause: "every dollar drop in the price of silver..." */
-  S(724.81, 730.07, (ctx, s) => {
+    CC.word(ctx, '$50.35 / OZ', 960, 320, 135, PAL.moneyDk, s.lt, 0.15);
+    bunker(ctx, s, { x: 960, y: FL, expr: 'joy' }, [{ at: 0.2, pose: 'cheer', expr: 'grin' }]);
+    CC.callout(ctx, 'JANUARY 18, 1980', 960, 150, s.lt, 0.4, { size: 75 });
+  }, { cam: CC.cam.punch(960, 480, 1.35, 0.3), sfx: [[0.3, 'ding']] });
+  S(720.16, 722.58, (ctx, s) => {
     CC.bg(ctx, PAL.sky, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "EVERY DOLLAR DROP IN THE ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 163 ─ 730.07–738.56  Clause: "A margin call is when a broker calls you..." */
-  S(730.07, 738.56, (ctx, s) => {
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BECAUSE THE HUNT BROTHERS HAD ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.42), sfx: [[0.15, 'whoosh']] });
+  S(722.58, 724.81, (ctx, s) => {
+    CC.bg(ctx, PAL.sage, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "BECAUSE THE HUNT BROTHERS HAD ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(724.81, 727.55, (ctx, s) => {
     CC.bg(ctx, PAL.beige, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "A MARGIN CALL IS WHEN A B", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 164 ─ 738.56–744.13  Clause: "If you cannot produce the cash, the brok..." */
-  S(738.56, 744.13, (ctx, s) => {
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "EVERY DOLLAR DROP IN THE PRICE", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.74), sfx: [[0.15, 'whoosh']] });
+  S(727.55, 730.07, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "EVERY DOLLAR DROP IN THE PRICE", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(730.07, 734.48, (ctx, s) => {
     CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "IF YOU CANNOT PRODUCE THE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 165 ─ 744.13–748.18  Clause: "For several weeks, the Hunts scrambled...." */
-  S(744.13, 748.18, (ctx, s) => {
-    CC.bg(ctx, PAL.sage, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'present', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "FOR SEVERAL WEEKS, THE HU", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 166 ─ 748.18–751.11  Clause: "They poured in millions of dollars of th..." */
-  S(748.18, 751.11, (ctx, s) => {
-    CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THEY POURED IN MILLIONS O", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 167 ─ 751.11–753.81  Clause: "sold off family assets, and tried to neg..." */
-  S(751.11, 753.81, (ctx, s) => {
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "A MARGIN CALL IS WHEN A BROKER", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 4.41), sfx: [[0.15, 'whoosh']] });
+  S(734.48, 738.56, (ctx, s) => {
     CC.bg(ctx, PAL.slate, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "SOLD OFF FAMILY ASSETS, A", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 168 ─ 753.81–755.15  Clause: "But the decline was relentless...." */
-  S(753.81, 755.15, (ctx, s) => {
-    CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BUT THE DECLINE WAS RELEN", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 169 ─ 755.15–759.77  Silver Thursday March 27, 1980 */
-  S(755.15, 759.77, (ctx, s) => {
-    CC.bg(ctx, PAL.charcoal, { floor: FL });
-    CC.callout(ctx, 'SILVER THURSDAY', 960, 260, s.lt, 0.2, { size: 105, rot: -0.04 });
-    CC.stamp(ctx, s, '$100M MARGIN CALL', 960, 480, 0.6, { col: PAL.red, size: 90 });
-    bunker(ctx, s, { x: 480, y: FL, expr: 'shock' }, [
-      { at: 0.5, collapse: 'left', fx: 'sweat' }
-    ]);
-  });
-
-  /* 170 ─ 759.77–764.45  Silver Thursday March 27, 1980 */
-  S(759.77, 764.45, (ctx, s) => {
-    CC.bg(ctx, PAL.charcoal, { floor: FL });
-    CC.callout(ctx, 'SILVER THURSDAY', 960, 260, s.lt, 0.2, { size: 105, rot: -0.04 });
-    CC.stamp(ctx, s, '$100M MARGIN CALL', 960, 480, 0.6, { col: PAL.red, size: 90 });
-    bunker(ctx, s, { x: 480, y: FL, expr: 'shock' }, [
-      { at: 0.5, collapse: 'left', fx: 'sweat' }
-    ]);
-  });
-
-  /* 171 ─ 764.45–777.04  Silver Thursday March 27, 1980 */
-  S(764.45, 777.04, (ctx, s) => {
-    CC.bg(ctx, PAL.charcoal, { floor: FL });
-    CC.callout(ctx, 'SILVER THURSDAY', 960, 260, s.lt, 0.2, { size: 105, rot: -0.04 });
-    CC.stamp(ctx, s, '$100M MARGIN CALL', 960, 480, 0.6, { col: PAL.red, size: 90 });
-    bunker(ctx, s, { x: 480, y: FL, expr: 'shock' }, [
-      { at: 0.5, collapse: 'left', fx: 'sweat' }
-    ]);
-  });
-
-  /* 172 ─ 777.04–777.24  Clause: "The Hunts simply did not have the cash...." */
-  S(777.04, 777.24, (ctx, s) => {
+    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "A MARGIN CALL IS WHEN A BROKER", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(738.56, 741.46, (ctx, s) => {
     CC.bg(ctx, PAL.sage, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THE HUNTS SIMPLY DID NOT ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 173 ─ 777.24–783.95  Clause: "Bunker Hunt was overseas in Europe tryin..." */
-  S(777.24, 783.95, (ctx, s) => {
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "IF YOU CANNOT PRODUCE THE CASH", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.90), sfx: [[0.15, 'whoosh']] });
+  S(741.46, 744.13, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "IF YOU CANNOT PRODUCE THE CASH", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(744.13, 746.24, (ctx, s) => {
     CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BUNKER HUNT WAS OVERSEAS ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 174 ─ 783.95–785.54  Silver Thursday March 27, 1980 */
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "FOR SEVERAL WEEKS, THE HUNTS S", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.11), sfx: [[0.15, 'whoosh']] });
+  S(746.24, 748.18, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "FOR SEVERAL WEEKS, THE HUNTS S", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(748.18, 751.11, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THEY POURED IN MILLIONS OF DOL", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.93), sfx: [[0.15, 'whoosh']] });
+  S(751.11, 753.81, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "SOLD OFF FAMILY ASSETS, AND TR", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.70), sfx: [[0.15, 'whoosh']] });
+  S(753.81, 755.15, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUT THE DECLINE WAS RELENTLESS", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.34), sfx: [[0.15, 'whoosh']] });
+  S(755.15, 757.55, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.callout(ctx, 'SILVER THURSDAY', 960, 260, s.lt, 0.2, { size: 110, rot: -0.04 });
+    CC.stamp(ctx, s, '$100M MARGIN CALL', 960, 480, 0.4, { col: PAL.red, size: 92 });
+  }, { cam: CC.cam.punch(960, 480, 1.35, 0.35), sfx: [[0.35, 'stamp']] });
+  S(757.55, 759.77, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    bunker(ctx, s, { x: 960, y: FL, s: 1.75, expr: 'shock' }, [{ at: 0.2, collapse: 'left', fx: 'sweat' }]);
+    CC.stamp(ctx, s, 'INSUFFICIENT FUNDS', 960, 240, 0.3, { col: PAL.red, size: 85 });
+  }, { cam: CC.cam.punch(960, 240, 1.25, 0.3), sfx: [[0.3, 'thud']] });
+  S(759.77, 762.2, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.callout(ctx, 'SILVER THURSDAY', 960, 260, s.lt, 0.2, { size: 110, rot: -0.04 });
+    CC.stamp(ctx, s, '$100M MARGIN CALL', 960, 480, 0.4, { col: PAL.red, size: 92 });
+  }, { cam: CC.cam.punch(960, 480, 1.35, 0.35), sfx: [[0.35, 'stamp']] });
+  S(762.2, 764.45, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    bunker(ctx, s, { x: 960, y: FL, s: 1.75, expr: 'shock' }, [{ at: 0.2, collapse: 'left', fx: 'sweat' }]);
+    CC.stamp(ctx, s, 'INSUFFICIENT FUNDS', 960, 240, 0.3, { col: PAL.red, size: 85 });
+  }, { cam: CC.cam.punch(960, 240, 1.25, 0.3), sfx: [[0.3, 'thud']] });
+  S(764.45, 771.0, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.callout(ctx, 'SILVER THURSDAY', 960, 260, s.lt, 0.2, { size: 110, rot: -0.04 });
+    CC.stamp(ctx, s, '$100M MARGIN CALL', 960, 480, 0.4, { col: PAL.red, size: 92 });
+  }, { cam: CC.cam.punch(960, 480, 1.35, 0.35), sfx: [[0.35, 'stamp']] });
+  S(771.0, 777.04, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    bunker(ctx, s, { x: 960, y: FL, s: 1.75, expr: 'shock' }, [{ at: 0.2, collapse: 'left', fx: 'sweat' }]);
+    CC.stamp(ctx, s, 'INSUFFICIENT FUNDS', 960, 240, 0.3, { col: PAL.red, size: 85 });
+  }, { cam: CC.cam.punch(960, 240, 1.25, 0.3), sfx: [[0.3, 'thud']] });
+  S(777.04, 777.24, (ctx, s) => {
+    CC.bg(ctx, PAL.beige, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE HUNTS SIMPLY DID NOT HAVE ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 0.20), sfx: [[0.15, 'whoosh']] });
+  S(777.24, 780.73, (ctx, s) => {
+    CC.bg(ctx, PAL.paper, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUNKER HUNT WAS OVERSEAS IN EU", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.49), sfx: [[0.15, 'whoosh']] });
+  S(780.73, 783.95, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "BUNKER HUNT WAS OVERSEAS IN EU", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
   S(783.95, 785.54, (ctx, s) => {
     CC.bg(ctx, PAL.charcoal, { floor: FL });
-    CC.callout(ctx, 'SILVER THURSDAY', 960, 260, s.lt, 0.2, { size: 105, rot: -0.04 });
-    CC.stamp(ctx, s, '$100M MARGIN CALL', 960, 480, 0.6, { col: PAL.red, size: 90 });
-    bunker(ctx, s, { x: 480, y: FL, expr: 'shock' }, [
-      { at: 0.5, collapse: 'left', fx: 'sweat' }
-    ]);
-  });
-
-  /* 175 ─ 785.54–789.97  Clause: "dumping millions of ounces onto a market..." */
-  S(785.54, 789.97, (ctx, s) => {
+    CC.callout(ctx, 'SILVER THURSDAY', 960, 260, s.lt, 0.2, { size: 110, rot: -0.04 });
+    CC.stamp(ctx, s, '$100M MARGIN CALL', 960, 480, 0.4, { col: PAL.red, size: 92 });
+  }, { cam: CC.cam.punch(960, 480, 1.35, 0.35), sfx: [[0.35, 'stamp']] });
+  S(785.54, 787.84, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "DUMPING MILLIONS OF OUNCES ONT", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.30), sfx: [[0.15, 'whoosh']] });
+  S(787.84, 789.97, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "DUMPING MILLIONS OF OUNCES ONT", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(789.97, 791.76, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE TRADING PITS ERUPTED IN AB", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.79), sfx: [[0.15, 'whoosh']] });
+  S(791.76, 793.41, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THE TRADING PITS ERUPTED IN AB", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(793.41, 796.45, (ctx, s) => {
     CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "DUMPING MILLIONS OF OUNCE", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 176 ─ 789.97–793.41  Trading pit price collapse */
-  S(789.97, 793.41, (ctx, s) => {
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE PRICE OF SILVER WENT INTO ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.04), sfx: [[0.15, 'whoosh']] });
+  S(796.45, 799.25, (ctx, s) => {
     CC.bg(ctx, PAL.rose, { floor: FL });
-    P.lineChart(ctx, 420, 240, 1080, 520, [[0, 0.95], [0.3, 0.6], [0.6, 0.3], [1, 0.1]], CC.prog(CC.q(s.lt), 0.1, 1.0), { col: PAL.red, lw: 10 });
-    CC.actor(ctx, s, 'analyst', { x: 1550, y: FL, expr: 'furious' }, [
-      { at: 0.2, pose: 'face', fx: 'sweat' }
-    ]);
-    CC.stamp(ctx, s, 'CRASH', 960, 360, 0.5, { col: PAL.red, size: 130 });
-  });
-
-  /* 177 ─ 793.41–799.25  Trading pit price collapse */
-  S(793.41, 799.25, (ctx, s) => {
-    CC.bg(ctx, PAL.rose, { floor: FL });
-    P.lineChart(ctx, 420, 240, 1080, 520, [[0, 0.95], [0.3, 0.6], [0.6, 0.3], [1, 0.1]], CC.prog(CC.q(s.lt), 0.1, 1.0), { col: PAL.red, lw: 10 });
-    CC.actor(ctx, s, 'analyst', { x: 1550, y: FL, expr: 'furious' }, [
-      { at: 0.2, pose: 'face', fx: 'sweat' }
-    ]);
-    CC.stamp(ctx, s, 'CRASH', 960, 360, 0.5, { col: PAL.red, size: 130 });
-  });
-
-  /* 178 ─ 799.25–810.44  Clause: "Rumors spread like wildfire across Wall ..." */
-  S(799.25, 810.44, (ctx, s) => {
-    CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "RUMORS SPREAD LIKE WILDFI", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 179 ─ 810.44–812.86  Clause: "The Dow Jones Industrial Average plunged..." */
+    CC.actor(ctx, s, 'analyst', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THE PRICE OF SILVER WENT INTO ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(799.25, 805.07, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "RUMORS SPREAD LIKE WILDFIRE AC", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 5.82), sfx: [[0.15, 'whoosh']] });
+  S(805.07, 810.44, (ctx, s) => {
+    CC.bg(ctx, PAL.sky, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "RUMORS SPREAD LIKE WILDFIRE AC", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
   S(810.44, 812.86, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE DOW JONES INDUSTRIAL AVERA", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.42), sfx: [[0.15, 'whoosh']] });
+  S(812.86, 818.95, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "TERRIFIED OF A SYSTEMIC BANKIN", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 6.09), sfx: [[0.15, 'whoosh']] });
+  S(818.95, 824.58, (ctx, s) => {
+    CC.bg(ctx, PAL.paper, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "TERRIFIED OF A SYSTEMIC BANKIN", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(824.58, 829.39, (ctx, s) => {
+    CC.bg(ctx, PAL.sky, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "OVER THE COMING WEEKS, THEY PU", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 4.81), sfx: [[0.15, 'whoosh']] });
+  S(829.39, 833.83, (ctx, s) => {
     CC.bg(ctx, PAL.sage, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THE DOW JONES INDUSTRIAL ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 180 ─ 812.86–824.58  Paul Volcker shuts credit lines */
-  S(812.86, 824.58, (ctx, s) => {
-    CC.bg(ctx, PAL.slate, { floor: FL, floorCol: PAL.charcoal });
-    P.bank(ctx, 1340, FL, { s: 1.1, label: 'FED RESERVE' });
-    CC.actor(ctx, s, 'banker', { x: 620, y: FL, pose: 'cross', expr: 'furious' }, [
-      { at: 0.3, pose: 'point', expr: 'furious' }
-    ]);
-    CC.stamp(ctx, s, 'CREDIT SHUTDOWN', 960, 240, 0.6, { col: PAL.red, size: 84 });
-  });
-
-  /* 181 ─ 824.58–833.83  Clause: "Over the coming weeks, they put together..." */
-  S(824.58, 833.83, (ctx, s) => {
-    CC.bg(ctx, PAL.slate, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "OVER THE COMING WEEKS, TH", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 182 ─ 833.83–835.23  Clause: "But in exchange, the banks took total co..." */
+    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "OVER THE COMING WEEKS, THEY PU", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
   S(833.83, 835.23, (ctx, s) => {
-    CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BUT IN EXCHANGE, THE BANK", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 183 ─ 835.23–837.82  Clause: "The brothers were forced to pledge their..." */
+    CC.bg(ctx, PAL.beige, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUT IN EXCHANGE, THE BANKS TOO", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.40), sfx: [[0.15, 'whoosh']] });
   S(835.23, 837.82, (ctx, s) => {
-    CC.bg(ctx, PAL.sky, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'present', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THE BROTHERS WERE FORCED ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 184 ─ 837.82–842.86  Clause: "real estate, ranches, racehorses, and fa..." */
-  S(837.82, 842.86, (ctx, s) => {
-    CC.bg(ctx, PAL.beige, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "REAL ESTATE, RANCHES, RAC", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 185 ─ 842.86–844.96  Gold ownership illegal / jail */
-  S(842.86, 844.96, (ctx, s) => {
-    CC.bg(ctx, PAL.slateDk, { floor: FL, floorCol: PAL.greyDk });
-    CC.obj(ctx, s, { x: 960, y: 520, in: 'none' }, c => P.bars(c, 0, 0, { w: 700, h: 500 }));
-    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, pose: 'face', expr: 'worried' }, [
-      { at: 0.5, pose: 'slump', fx: 'sweat' }
-    ]);
-    CC.callout(ctx, 'EXECUTIVE ORDER 6102', 960, 160, s.lt, 0.4, { size: 68 });
-  });
-
-  /* 186 ─ 844.96–848.55  Chapter Card: The Billion-Dollar Lesson */
-  S(844.96, 848.55, (ctx, s) => {
-    CC.chapter(ctx, s, "The Billion-Dollar Lesson", { kicker: "FINAL CHAPTER", at: 0.1, dur: 1.20 });
-  }, { fadeIn: 0.15, fadeOut: 0.15 });
-
-  /* 187 ─ 848.55–860.33  Clause: "In nineteen eighty-eight, a federal jury..." */
-  S(848.55, 860.33, (ctx, s) => {
-    CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "IN NINETEEN EIGHTY-EIGHT,", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 188 ─ 860.33–868.63  Clause: "The jury ordered the brothers to pay ove..." */
-  S(860.33, 868.63, (ctx, s) => {
-    CC.bg(ctx, PAL.slate, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THE JURY ORDERED THE BROT", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 189 ─ 868.63–873.95  Clause: "Faced with astronomical legal bills, ban..." */
-  S(868.63, 873.95, (ctx, s) => {
-    CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'present', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "FACED WITH ASTRONOMICAL L", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 190 ─ 873.95–878.62  Bankruptcy courtroom */
-  S(873.95, 878.62, (ctx, s) => {
-    CC.bg(ctx, PAL.wood, { floor: FL, floorCol: PAL.brown });
-    P.podium(ctx, 1320, FL + 30, { label: 'AUCTION' });
-    CC.actor(ctx, s, 'judge', { x: 1320, y: FL - 30, expr: 'neutral' }, [
-      { at: 0.4, pose: 'point' }
-    ]);
-    bunker(ctx, s, { x: 540, y: FL, pose: 'slump', expr: 'disappointed' }, [
-      { at: 0.5, fx: 'sweat' }
-    ]);
-    CC.stamp(ctx, s, 'BANKRUPT', 960, 300, 0.6, { col: PAL.red, size: 100 });
-  });
-
-  /* 191 ─ 878.62–886.34  Bankruptcy courtroom */
-  S(878.62, 886.34, (ctx, s) => {
-    CC.bg(ctx, PAL.wood, { floor: FL, floorCol: PAL.brown });
-    P.podium(ctx, 1320, FL + 30, { label: 'AUCTION' });
-    CC.actor(ctx, s, 'judge', { x: 1320, y: FL - 30, expr: 'neutral' }, [
-      { at: 0.4, pose: 'point' }
-    ]);
-    bunker(ctx, s, { x: 540, y: FL, pose: 'slump', expr: 'disappointed' }, [
-      { at: 0.5, fx: 'sweat' }
-    ]);
-    CC.stamp(ctx, s, 'BANKRUPT', 960, 300, 0.6, { col: PAL.red, size: 100 });
-  });
-
-  /* 192 ─ 886.34–889.86  Clause: "his father's oil leases, and even his pe..." */
-  S(886.34, 889.86, (ctx, s) => {
     CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "HIS FATHER'S OIL LEASES, ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 193 ─ 889.86–896.13  Clause: "His personal fortune, once estimated to ..." */
-  S(889.86, 896.13, (ctx, s) => {
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE BROTHERS WERE FORCED TO PL", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.59), sfx: [[0.15, 'whoosh']] });
+  S(837.82, 840.44, (ctx, s) => {
     CC.bg(ctx, PAL.sage, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "HIS PERSONAL FORTUNE, ONC", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 194 ─ 896.13–905.61  Clause: "Decades later, the Hunt brothers' silver..." */
-  S(896.13, 905.61, (ctx, s) => {
-    CC.bg(ctx, PAL.tan, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'shrug', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "DECADES LATER, THE HUNT B", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 195 ─ 905.61–906.62  Clause: "They were right about inflation...." */
-  S(905.61, 906.62, (ctx, s) => {
-    CC.bg(ctx, PAL.slate, { floor: FL });
-    CC.actor(ctx, s, 'reporter', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'present', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THEY WERE RIGHT ABOUT INF", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 196 ─ 906.62–909.81  Clause: "They were right that industrial demand w..." */
-  S(906.62, 909.81, (ctx, s) => {
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "REAL ESTATE, RANCHES, RACEHORS", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.62), sfx: [[0.15, 'whoosh']] });
+  S(840.44, 842.86, (ctx, s) => {
     CC.bg(ctx, PAL.skyLt, { floor: FL });
-    CC.actor(ctx, s, 'tycoon', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'wave', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "THEY WERE RIGHT THAT INDU", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 197 ─ 909.81–914.22  Clause: "And they were right that paper currency ..." */
-  S(909.81, 914.22, (ctx, s) => {
+    CC.actor(ctx, s, 'worker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "REAL ESTATE, RANCHES, RACEHORS", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(842.86, 844.96, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE SILVER EMPIRE HAD TURNED I", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.10), sfx: [[0.15, 'whoosh']] });
+  /* CH 7 */ S(844.96, 848.55, (ctx, s) => CC.chapter(ctx, s, "The Billion-Dollar Lesson", { kicker: "FINAL CHAPTER", at: 0.1, dur: 1.0 }), { cam: CC.cam.punch(960, 540, 1.1, 0.1), sfx: [[0.1, 'thud']] });
+  S(848.55, 854.68, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "IN NINETEEN EIGHTY-EIGHT, A FE", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 6.13), sfx: [[0.15, 'whoosh']] });
+  S(854.68, 860.33, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "IN NINETEEN EIGHTY-EIGHT, A FE", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(860.33, 864.65, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THE JURY ORDERED THE BROTHERS ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 4.32), sfx: [[0.15, 'whoosh']] });
+  S(864.65, 868.63, (ctx, s) => {
     CC.bg(ctx, PAL.sky, { floor: FL });
-    CC.actor(ctx, s, 'banker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'think', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "AND THEY WERE RIGHT THAT ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 198 ─ 914.22–920.42  Clause: "But they forgot the most important rule ..." */
-  S(914.22, 920.42, (ctx, s) => {
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "THE JURY ORDERED THE BROTHERS ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(868.63, 871.4, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "FACED WITH ASTRONOMICAL LEGAL ", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.77), sfx: [[0.15, 'whoosh']] });
+  S(871.4, 873.95, (ctx, s) => {
     CC.bg(ctx, PAL.beige, { floor: FL });
-    CC.actor(ctx, s, 'analyst', { x: 1240, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'thumbsUp', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "BUT THEY FORGOT THE MOST ", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 199 ─ 920.42–922.45  Clause: "he goes to jail...." */
-  S(920.42, 922.45, (ctx, s) => {
+    CC.actor(ctx, s, 'analyst', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "FACED WITH ASTRONOMICAL LEGAL ", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(873.95, 876.38, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL, floorCol: PAL.greyDk });
+    CC.obj(ctx, s, { x: 960, y: 460, at: 0.2, in: 'pop' }, c => {
+      P.bill(c, 0, 0, { s: 2.2, label: '$100' });
+      CC.stamp(c, s, 'WORTHLESS', 0, 0, 0.4, { col: PAL.red, size: 95 });
+    });
+    bunker(ctx, s, { x: 420, y: FL, pose: 'shrug', expr: 'disappointed' }, [{ at: 0.6, expr: 'shock', fx: 'sweat' }]);
+  }, { cam: CC.cam.punch(960, 460, 1.25, 0.2), sfx: [[0.2, 'stamp']] });
+  S(876.38, 878.62, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.rain(ctx, s, 'bill', { n: 12, speed: 450 });
+    analyst(ctx, s, { x: 960, y: FL, s: 1.75, expr: 'shock' }, [{ at: 0.2, pose: 'face', fx: 'sweat' }]);
+    CC.callout(ctx, 'BANKRUPTCY', 960, 200, s.lt, 0.2, { size: 90, col: PAL.red });
+  }, { cam: CC.cam.zoom(1.1), sfx: [[0.1, 'whoosh']] });
+  S(878.62, 882.63, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL, floorCol: PAL.greyDk });
+    CC.obj(ctx, s, { x: 960, y: 460, at: 0.2, in: 'pop' }, c => {
+      P.bill(c, 0, 0, { s: 2.2, label: '$100' });
+      CC.stamp(c, s, 'WORTHLESS', 0, 0, 0.4, { col: PAL.red, size: 95 });
+    });
+    bunker(ctx, s, { x: 420, y: FL, pose: 'shrug', expr: 'disappointed' }, [{ at: 0.6, expr: 'shock', fx: 'sweat' }]);
+  }, { cam: CC.cam.punch(960, 460, 1.25, 0.2), sfx: [[0.2, 'stamp']] });
+  S(882.63, 886.34, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.rain(ctx, s, 'bill', { n: 12, speed: 450 });
+    analyst(ctx, s, { x: 960, y: FL, s: 1.75, expr: 'shock' }, [{ at: 0.2, pose: 'face', fx: 'sweat' }]);
+    CC.callout(ctx, 'BANKRUPTCY', 960, 200, s.lt, 0.2, { size: 90, col: PAL.red });
+  }, { cam: CC.cam.zoom(1.1), sfx: [[0.1, 'whoosh']] });
+  S(886.34, 888.17, (ctx, s) => {
+    CC.bg(ctx, PAL.beige, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "HIS FATHER'S OIL LEASES, AND E", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.83), sfx: [[0.15, 'whoosh']] });
+  S(888.17, 889.86, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "HIS FATHER'S OIL LEASES, AND E", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(889.86, 893.12, (ctx, s) => {
     CC.bg(ctx, PAL.paper, { floor: FL });
-    CC.actor(ctx, s, 'worker', { x: 680, y: FL, s: 1.45, expr: 'neutral' }, [
-      { at: 0.2, pose: 'point', expr: 'confident' }
-    ]);
-    CC.callout(ctx, "HE GOES TO JAIL.", 960, 320, s.lt, 0.4, { size: 64, maxW: 800 });
-  });
-
-  /* 200 ─ 922.45–925.61  Final punchline: The House Rewrites the Rules */
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "HIS PERSONAL FORTUNE, ONCE EST", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.26), sfx: [[0.15, 'whoosh']] });
+  S(893.12, 896.13, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "HIS PERSONAL FORTUNE, ONCE EST", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(896.13, 901.06, (ctx, s) => {
+    CC.bg(ctx, PAL.sage, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'think', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "DECADES LATER, THE HUNT BROTHE", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 4.93), sfx: [[0.15, 'whoosh']] });
+  S(901.06, 905.61, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "DECADES LATER, THE HUNT BROTHE", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(905.61, 906.62, (ctx, s) => {
+    CC.bg(ctx, PAL.tan, { floor: FL });
+    CC.actor(ctx, s, 'analyst', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'thumbsUp', expr: 'confident' }]);
+    P.coinStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THEY WERE RIGHT ABOUT INFLATIO", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 1.01), sfx: [[0.15, 'whoosh']] });
+  S(906.62, 909.81, (ctx, s) => {
+    CC.bg(ctx, PAL.slate, { floor: FL });
+    CC.actor(ctx, s, 'worker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'cross', expr: 'confident' }]);
+    P.skyscraper(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "THEY WERE RIGHT THAT INDUSTRIA", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.19), sfx: [[0.15, 'whoosh']] });
+  S(909.81, 912.1, (ctx, s) => {
+    CC.bg(ctx, PAL.skyLt, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'point', expr: 'confident' }]);
+    P.bank(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "AND THEY WERE RIGHT THAT PAPER", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.29), sfx: [[0.15, 'whoosh']] });
+  S(912.1, 914.22, (ctx, s) => {
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'reporter', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "AND THEY WERE RIGHT THAT PAPER", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(914.22, 917.44, (ctx, s) => {
+    CC.bg(ctx, PAL.navy, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'shrug', expr: 'confident' }]);
+    P.document(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUT THEY FORGOT THE MOST IMPOR", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.22), sfx: [[0.15, 'whoosh']] });
+  S(917.44, 920.42, (ctx, s) => {
+    CC.bg(ctx, PAL.sky, { floor: FL });
+    CC.actor(ctx, s, 'techceo', { x: 960, y: FL, s: 1.75, expr: 'smug' }, [{ at: 0.2, pose: 'pointUp' }]);
+    CC.stamp(ctx, s, "BUT THEY FORGOT THE MOST IMPOR", 960, 250, 0.25, { col: PAL.charcoal, size: 70 });
+  }, { cam: CC.cam.punch(960, 480, 1.28, 0.2), sfx: [[0.2, 'pop']] });
+  S(920.42, 922.45, (ctx, s) => {
+    CC.bg(ctx, PAL.charcoal, { floor: FL });
+    CC.actor(ctx, s, 'tycoon', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'present', expr: 'confident' }]);
+    P.cashStack(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "HE GOES TO JAIL.", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 2.03), sfx: [[0.15, 'whoosh']] });
   S(922.45, 925.61, (ctx, s) => {
-    CC.spot(ctx, 960, FL, { w: 540 });
-    bunker(ctx, s, { x: 960, y: FL + 100, s: 1.8, expr: 'disappointed' }, [
-      { at: 0.4, expr: 'neutral', turn: true }
-    ]);
-    CC.stamp(ctx, s, 'THE HOUSE REWRITES THE RULES', 960, 320, 0.6, { col: PAL.white, size: 70 });
-  }, { cam: CC.cam.punch(960, 480, 1.35, 0.4) });
-
+    CC.bg(ctx, PAL.rose, { floor: FL });
+    CC.actor(ctx, s, 'banker', { x: 640, y: FL, s: 1.45, expr: 'neutral' }, [{ at: 0.15, pose: 'wave', expr: 'confident' }]);
+    P.bill(ctx, 1280, FL, { s: 1.3 });
+    CC.callout(ctx, "BUT WHEN THE BIG GUY BREAKS TH", 960, 260, s.lt, 0.3, { size: 66, maxW: 820 });
+  }, { cam: CC.cam.push(960, 480, 1.15, 0, 3.16), sfx: [[0.15, 'whoosh']] });
   TM.config({
     fps: 30,
     duration: 925.61,
