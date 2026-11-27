@@ -1,7 +1,7 @@
 // node peek.mjs <projectDir> [all|f1,f2,...]  -> renders selected frames to <projectDir>/peek/
 import { chromium } from 'playwright-core';
 import fs from 'fs'; import path from 'path';
-const dir = process.argv[2]; const sel = process.argv[3] || 'all';
+const dir = path.resolve(process.argv[2] || '.'); const sel = process.argv[3] || 'all';
 const out = path.join(dir, 'peek'); fs.mkdirSync(out, { recursive: true });
 const launchOpts = {
   args: ['--use-angle=swiftshader','--enable-unsafe-swiftshader','--no-sandbox','--disable-dev-shm-usage']

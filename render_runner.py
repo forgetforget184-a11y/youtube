@@ -1,6 +1,9 @@
 import os, sys, subprocess, shutil, argparse
 
 def run_render(project_dir, voice_path, out_mp4, duration=None, music="auto", music_level=0.15):
+    project_dir = os.path.abspath(project_dir)
+    voice_path = os.path.abspath(voice_path)
+    out_mp4 = os.path.abspath(out_mp4)
     HERE = os.path.dirname(os.path.abspath(__file__))
     engine_dir = os.path.join(HERE, ".agents", "skills", "crayon-capital-explainer", "engine")
     sfx_dir = os.path.join(engine_dir, "sfx")

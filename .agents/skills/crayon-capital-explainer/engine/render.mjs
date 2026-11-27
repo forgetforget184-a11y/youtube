@@ -9,7 +9,7 @@ import { chromium } from 'playwright-core';
 import fs from 'fs';
 import path from 'path';
 
-const projectDir = process.argv[2] || '.';
+const projectDir = path.resolve(process.argv[2] || '.');
 let N = process.argv[3] ? parseInt(process.argv[3], 10) : 0;
 const framesDir = path.join(projectDir, 'frames');
 fs.mkdirSync(framesDir, { recursive: true });
