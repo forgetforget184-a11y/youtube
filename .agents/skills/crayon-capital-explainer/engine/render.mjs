@@ -44,8 +44,8 @@ fs.writeFileSync(path.join(projectDir, 'cues.json'), JSON.stringify(cues, null, 
 console.log('cues.json:', cues.length, 'SFX events');
 await probePage.close();
 
-// Multi-worker concurrency
-const NUM_WORKERS = Math.max(1, Math.min(os.cpus().length, 4));
+// Multi-worker concurrency (optimally matches vCPU cores to eliminate CPU throttling)
+const NUM_WORKERS = Math.max(1, Math.min(os.cpus().length, 2));
 console.log(`Starting ${NUM_WORKERS} parallel render worker(s)...`);
 
 const workers = await Promise.all(Array.from({ length: NUM_WORKERS }, async (_, i) => {
@@ -79,7 +79,7 @@ await Promise.all(workers.map(async (page, wIndex) => {
     const frameFile = path.join(framesDir, String(f).padStart(5, '0') + '.jpg');
     const dataUrl = await page.evaluate((ff) => {
       window.renderFrame(ff);
-      return document.getElementById('stage').toDataURL('image/jpeg', 0.88);
+      return document.getElementById('stage').toDataURL('image/jpeg', 0.80);
     }, f);
     const buf = Buffer.from(dataUrl.split(',')[1], 'base64');
     fs.writeFileSync(frameFile, buf);

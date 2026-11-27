@@ -70,7 +70,7 @@ def run_render(project_dir, voice_path, out_mp4, duration=None, music="auto", mu
     ]
     subprocess.check_call(cmd_norm)
 
-    # 4. Video Muxing (H.264 + AAC)
+    # 4. Video Muxing (H.264 + AAC) - Using veryfast for ultra-fast cloud encoding
     print("Step 4/4: Muxing MP4 video...", flush=True)
     frames_pattern = os.path.join(frames_dir, "%05d.jpg")
     os.makedirs(os.path.dirname(out_mp4), exist_ok=True)
@@ -80,7 +80,7 @@ def run_render(project_dir, voice_path, out_mp4, duration=None, music="auto", mu
         "-i", frames_pattern,
         "-i", norm_wav,
         "-map", "0:v", "-map", "1:a",
-        "-c:v", "libx264", "-preset", "medium", "-crf", "18",
+        "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
         "-pix_fmt", "yuv420p",
         "-c:a", "aac", "-b:a", "192k", "-ar", "48000",
         "-shortest", "-movflags", "+faststart",
