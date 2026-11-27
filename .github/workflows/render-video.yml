@@ -18,6 +18,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 env:
   NODE_OPTIONS: "--no-deprecation"
@@ -99,7 +100,7 @@ jobs:
             explainer/hunt_brothers/work/PLAN.md
           retention-days: 14
 
-      - name: Publish Video Release & Trigger Email Notification
+      - name: Publish Video Release
         if: success()
         uses: softprops/action-gh-release@v2
         with:
@@ -120,3 +121,29 @@ jobs:
             explainer/hunt_brothers/work/contact_sheet.jpg
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Send Email Alert to @HimanshuGit0910
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const status = '${{ job.status }}' === 'success' ? '🎉 Success' : '⚠️ Failed';
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const releaseUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/releases`;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `${status}: Video Render Completed (Run #${context.runNumber})`,
+              body: `Hello @HimanshuGit0910 (himanshugit0910@gmail.com),
+
+            Your video rendering workflow on GitHub Actions has completed with status: **${{ job.status }}**!
+
+            ### 🎬 Video Details:
+            - **Title:** The Billionaires Who Cornered the Silver Market
+            - **Duration:** ~15 Minutes (1080p Full HD @ 30 fps)
+            - **Run Summary & Artifacts:** ${runUrl}
+            - **Releases & Direct MP4 Download:** ${releaseUrl}
+
+            You are receiving this notification because you requested completion alerts for himanshugit0910@gmail.com.`
+            });
