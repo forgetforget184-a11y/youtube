@@ -1,6 +1,6 @@
 /* ============================================================================
  * story.js — "The Billionaires Who Cornered the Silver Market"
- * Crayon Capital procedural Canvas2D animated video — Ultra-Dynamic V2
+ * Crayon Capital procedural Canvas2D animated video — Ultra-Dynamic V2 (Fixed)
  * ==========================================================================*/
 (function () {
   const TM = window.TM, CC = TM.CC, P = CC.P, PAL = CC.PAL, INK = CC.INK, W = TM.W, H = TM.H;
@@ -10,6 +10,28 @@
 
   const shots = [];
   const S = (a, b, draw, o) => shots.push(Object.assign({ start: a, end: b, draw }, o || {}));
+
+  // Ensure CC.rain is safely defined
+  CC.rain = function (ctx, s, kind, o) {
+    o = o || {};
+    const n = o.n || 12, speed = o.speed || 400;
+    const lq = CC.q(s.lt);
+    for (let i = 0; i < n; i++) {
+      const x = ((i * 173 + 80) % 1800) + 60;
+      const y0 = ((i * 241) % 1000) - 200;
+      const y = (y0 + lq * speed) % 1200 - 100;
+      const rot = (i * 0.4 + lq * 2) % (Math.PI * 2);
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rot);
+      if (kind === 'coin') {
+        P.coin(ctx, 0, 0, { r: 28 });
+      } else {
+        P.bill(ctx, 0, 0, { s: 1.1 });
+      }
+      ctx.restore();
+    }
+  };
 
   // Actors
   const bunker = (ctx, s, base, track) => CC.actor(ctx, s, 'tycoon', Object.assign({ s: 1.5, expr: 'neutral' }, base), track);

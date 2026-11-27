@@ -5,10 +5,9 @@ with open('explainer/hunt_brothers/work/cues.json', 'r', encoding='utf-8') as f:
 
 print(f"Loaded {len(cues)} cues.")
 
-# We will build rich dynamic shots with micro-cuts, dynamic camera zooms, and SFX
 header = """/* ============================================================================
  * story.js — "The Billionaires Who Cornered the Silver Market"
- * Crayon Capital procedural Canvas2D animated video — Ultra-Dynamic V2
+ * Crayon Capital procedural Canvas2D animated video — Ultra-Dynamic V2 (Fixed)
  * ==========================================================================*/
 (function () {
   const TM = window.TM, CC = TM.CC, P = CC.P, PAL = CC.PAL, INK = CC.INK, W = TM.W, H = TM.H;
@@ -18,6 +17,28 @@ header = """/* =================================================================
 
   const shots = [];
   const S = (a, b, draw, o) => shots.push(Object.assign({ start: a, end: b, draw }, o || {}));
+
+  // Ensure CC.rain is safely defined
+  CC.rain = function (ctx, s, kind, o) {
+    o = o || {};
+    const n = o.n || 12, speed = o.speed || 400;
+    const lq = CC.q(s.lt);
+    for (let i = 0; i < n; i++) {
+      const x = ((i * 173 + 80) % 1800) + 60;
+      const y0 = ((i * 241) % 1000) - 200;
+      const y = (y0 + lq * speed) % 1200 - 100;
+      const rot = (i * 0.4 + lq * 2) % (Math.PI * 2);
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rot);
+      if (kind === 'coin') {
+        P.coin(ctx, 0, 0, { r: 28 });
+      } else {
+        P.bill(ctx, 0, 0, { s: 1.1 });
+      }
+      ctx.restore();
+    }
+  };
 
   // Actors
   const bunker = (ctx, s, base, track) => CC.actor(ctx, s, 'tycoon', Object.assign({ s: 1.5, expr: 'neutral' }, base), track);
@@ -30,8 +51,6 @@ header = """/* =================================================================
 """
 
 shots = []
-
-# Color themes cycle
 BGS = ['PAL.sky', 'PAL.beige', 'PAL.paper', 'PAL.sage', 'PAL.tan', 'PAL.slate', 'PAL.skyLt', 'PAL.navy', 'PAL.charcoal', 'PAL.rose']
 
 for i, (t0, t1, text) in enumerate(cues):
@@ -66,15 +85,12 @@ for i, (t0, t1, text) in enumerate(cues):
         shots.append(f"""  /* CH 7 */ S({t0}, {t1}, (ctx, s) => CC.chapter(ctx, s, "The Billion-Dollar Lesson", {{ kicker: "FINAL CHAPTER", at: 0.1, dur: 1.0 }}), {{ cam: CC.cam.punch(960, 540, 1.1, 0.1), sfx: [[0.1, 'thud']] }});""")
         continue
 
-    # Split into 2 micro-shots if duration > 3.0s
     split = dur > 3.2
     t_mid = round(t0 + dur * 0.52, 2) if split else t1
 
-    # Part 1: Establishing Action
     bg1 = BGS[i % len(BGS)]
     clean_txt = json.dumps(text[:30].upper())
     
-    # Specific iconic scenes
     if i == 0 or "walked into wall street" in low:
         s1 = f"""  S({t0}, {t_mid}, (ctx, s) => {{
     CC.bg(ctx, PAL.sky, {{ floor: FL, floorCol: PAL.tanDk }});
@@ -242,7 +258,6 @@ for i, (t0, t1, text) in enumerate(cues):
     CC.stamp(ctx, s, 'INSUFFICIENT FUNDS', 960, 240, 0.3, {{ col: PAL.red, size: 85 }});
   }}, {{ cam: CC.cam.punch(960, 240, 1.25, 0.3), sfx: [[0.3, 'thud']] }});"""
     else:
-        # High-energy dynamic scenes alternating props, camera moves & actors
         actor_name = ['tycoon', 'banker', 'analyst', 'worker', 'reporter', 'techceo'][i % 6]
         action = ['point', 'shrug', 'present', 'wave', 'think', 'thumbsUp', 'cross'][i % 7]
         prop_pick = ['cashStack', 'bill', 'coinStack', 'skyscraper', 'bank', 'document'][i % 6]
@@ -277,8 +292,8 @@ footer = f"""
 
 full_code = header + "\n".join(shots) + footer
 
-with open('c:/Users/forge/OneDrive/Desktop/youtube/explainer/hunt_brothers/anim/story.js', 'w', encoding='utf-8') as f:
+with open('explainer/hunt_brothers/anim/story.js', 'w', encoding='utf-8') as f:
     f.write(full_code)
 
 print(f"Total shots generated: {len(shots)}")
-print("Wrote explainer/hunt_brothers/anim/story.js successfully!")
+print("Wrote explainer/hunt_brothers/anim/story.js successfully with CC.rain fully defined!")
