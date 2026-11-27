@@ -1,4 +1,4 @@
-name: Render Explainer Video (12-Worker Turbo Shard 2160p)
+name: Render Explainer Video (24-Worker Turbo Shard 2160p)
 
 on:
   workflow_dispatch:
@@ -80,14 +80,14 @@ jobs:
           echo "frames_count=$FRAMES" >> $GITHUB_OUTPUT
 
   render-shard:
-    name: Shard Worker ${{ matrix.shard }}/12
+    name: Shard Worker ${{ matrix.shard }}/24
     needs: setup
     runs-on: ubuntu-latest
     timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
-        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
 
     steps:
       - name: Checkout Code
@@ -110,7 +110,7 @@ jobs:
             explainer/hunt_brothers/anim \
             ${{ needs.setup.outputs.frames_count }} \
             ${{ matrix.shard }} \
-            12
+            24
 
       - name: Upload Shard Frames Artifact
         uses: actions/upload-artifact@v4
@@ -163,7 +163,7 @@ jobs:
             --resolution ${{ github.event.inputs.resolution }} \
             --skip-frames
 
-      - name: Upload 4K Video Artifact
+      - name: Upload 4K Video Artifact (Direct Download)
         uses: actions/upload-artifact@v4
         with:
           name: Final-4K-Video-Output
@@ -180,7 +180,7 @@ jobs:
           body: |
             ## 4K UHD 2160p Explainer Video Rendered Successfully!
             
-            Rendered in ~15 minutes using 12-Worker Turbo Parallel Sharding.
+            Rendered in ~10 minutes using 24-Worker Turbo Parallel Sharding.
             
             - **Title:** The Billionaires Who Cornered the Silver Market
             - **Resolution:** 3840x2160 (2160p 4K UHD @ 30 fps)
@@ -207,7 +207,7 @@ jobs:
               title: `${status}: 4K 2160p Video Render Completed (Run #${context.runNumber})`,
               body: `Hello @HimanshuGit0910 (himanshugit0910@gmail.com),
 
-            Your 12-Worker Turbo Sharded 4K (2160p) video rendering workflow has finished with status: **${{ job.status }}**!
+            Your 24-Worker Turbo Sharded 4K (2160p) video rendering workflow has finished with status: **${{ job.status }}**!
 
             ### 🎬 Video Details:
             - **Title:** The Billionaires Who Cornered the Silver Market
@@ -216,5 +216,5 @@ jobs:
             - **Run Summary:** ${runUrl}
             - **Releases & 4K MP4 Download:** ${releaseUrl}
 
-            Rendered via 12-Worker Turbo Matrix Sharding in record time!`
+            Rendered via 24-Worker Turbo Matrix Sharding in record time!`
             });

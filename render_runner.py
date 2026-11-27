@@ -79,9 +79,11 @@ def run_render(project_dir, voice_path, out_mp4, duration=None, music="auto", mu
     scale_args = []
     if resolution == "2160p":
         scale_args = ["-vf", "scale=3840:2160:flags=lanczos"]
-        crf_val = "17"
+        crf_val = "20"
+        bitrate_args = ["-maxrate", "16M", "-bufsize", "32M"]
     else:
         crf_val = "18"
+        bitrate_args = []
 
     cmd_mux = [
         "ffmpeg", "-v", "error", "-y",
@@ -90,7 +92,8 @@ def run_render(project_dir, voice_path, out_mp4, duration=None, music="auto", mu
         "-i", norm_wav,
         "-map", "0:v", "-map", "1:a"
     ] + scale_args + [
-        "-c:v", "libx264", "-preset", "veryfast", "-crf", crf_val,
+        "-c:v", "libx264", "-preset", "veryfast", "-crf", crf_val
+    ] + bitrate_args + [
         "-pix_fmt", "yuv420p",
         "-c:a", "aac", "-b:a", "192k", "-ar", "48000",
         "-shortest", "-movflags", "+faststart",
