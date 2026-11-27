@@ -26,6 +26,7 @@ permissions:
 
 env:
   NODE_OPTIONS: "--no-deprecation"
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
   setup:
@@ -95,7 +96,7 @@ jobs:
       - name: Set up Node.js LTS
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Install Playwright & Chromium
         working-directory: .agents/skills/crayon-capital-explainer/engine
@@ -162,8 +163,16 @@ jobs:
             --resolution ${{ github.event.inputs.resolution }} \
             --skip-frames
 
+      - name: Upload 4K Video Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Final-4K-Video-Output
+          path: explainer/hunt_brothers/out/*.mp4
+          retention-days: 14
+
       - name: Publish 4K Video Release
         if: success()
+        continue-on-error: true
         uses: softprops/action-gh-release@v2
         with:
           tag_name: "v2.0.0-4k-video-${{ github.run_number }}"
