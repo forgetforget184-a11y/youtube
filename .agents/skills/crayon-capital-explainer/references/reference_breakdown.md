@@ -47,3 +47,18 @@ Sources: eS1zZKHFzwE (Nvidia/Jensen), tsZIyy18qIo (J.P. Morgan), rkJ9v-GJzLw (St
 
 ## J.P. Morgan first 30 s (shot list)
 0–1 wide skyscraper + text · 1–2 bank sign push-in · 2–4 rotating Earth with building on top · 4–8 fade to black, lone top-hat man · 8–11 "U.S. Economy" building on a mountain, cracks form · 11–13 two worried figures · 13–14 man lifts building and slides away · 14–18 crowd stares · 18–20 black + spotlight figure · 20–21 chapter card · 21–23 house exterior · 23–26 framed family portrait · 26–30 father at desk, boy begging.
+
+## Official Thumbnail Blueprint (Exact Channel Standard)
+- Format: 16:9, exact 1280×720 pixels (high quality JPG).
+- Canvas: Flat, vibrant colored background (primary blue, royal blue, or deep red/green) with authentic colored-pencil wax crosshatch grain.
+- Left Hero Character:
+  - Big circular pure white head (no skin tone), black dot eyes, round glasses, and an exaggerated wide-open excited/shocked mouth.
+  - Neatly parted black hair under any relevant hat (e.g. Texas cowboy hat).
+  - Dark suit with white collar, red tie, and a small rectangular year/context badge on the lapel (e.g. `1938`, `1979`).
+  - White hands physically acting with a primary story prop (e.g. holding chopsticks eating noodles, holding tongs pulling glowing silver bullion).
+- Center-Right Typography:
+  - Top Line: Giant chunky bright-yellow 3D marker text with heavy black outlines and deep black offset drop-shadow (`$1 TRILLION`, `$1 BILLION`, `1/3`).
+  - Bottom Line: Bold white sans-serif handwritten text with thick black outline directly below the yellow text (`FROM NOODLES`, `IN SILVER`).
+- Top-Right Props:
+  - Small modern smartphone with app/chart display.
+  - Minimalist glass skyscraper with bold company/location sign (`GLOBAL`, `WALL ST`) and green trees at the base.
