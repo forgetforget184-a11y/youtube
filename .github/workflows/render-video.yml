@@ -16,6 +16,9 @@ on:
         required: true
         default: '0.15'
 
+permissions:
+  contents: write
+
 env:
   NODE_OPTIONS: "--no-deprecation"
 
@@ -95,3 +98,25 @@ jobs:
             explainer/hunt_brothers/work/contact_sheet.jpg
             explainer/hunt_brothers/work/PLAN.md
           retention-days: 14
+
+      - name: Publish Video Release & Trigger Email Notification
+        if: success()
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "v1.0.0-video-${{ github.run_number }}"
+          name: "Video Complete: The Billionaires Who Cornered Silver"
+          body: |
+            ## Video Render Completed Successfully!
+            
+            Your 15-minute 1080p Crayon Capital-style explainer video is ready.
+            
+            - **Title:** The Billionaires Who Cornered the Silver Market
+            - **Format:** 1920x1080 @ 30 fps (H.264 + AAC)
+            - **Audio Mix:** Full narration + auto SFX + ducked music bed (-16.5 dB)
+            
+            Download the attached `.mp4` file directly below.
+          files: |
+            explainer/hunt_brothers/out/*.mp4
+            explainer/hunt_brothers/work/contact_sheet.jpg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
