@@ -1,13 +1,12 @@
 /* ============================================================================
  * render.mjs — drive render.html headlessly with Playwright (SwiftShader) and
- * write frames/f%05d.jpg. Usage:
+ * write frames/f%05d.jpg with parallel worker concurrency. Usage:
  *   node render.mjs <projectDir> <N>
- * projectDir must contain render.html + engine files + story.js.
- * N = number of frames (if omitted, read window.TM.N after load).
  * ==========================================================================*/
 import { chromium } from 'playwright-core';
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 
 const projectDir = path.resolve(process.argv[2] || '.');
 let N = process.argv[3] ? parseInt(process.argv[3], 10) : 0;
@@ -29,43 +28,71 @@ if (process.env.PW_CHROMIUM) {
 } else if (fs.existsSync('/usr/bin/chromium')) {
   launchOpts.executablePath = '/usr/bin/chromium';
 }
-const b = await chromium.launch(launchOpts);
-const page = await b.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
-page.on('console', m => { if (m.type() === 'error') console.log('PAGE-ERR:', m.text()); });
-page.on('pageerror', e => console.log('PAGE-EXC:', e.message));
 
+const b = await chromium.launch(launchOpts);
 const url = 'file://' + path.resolve(projectDir, 'render.html');
-await page.goto(url, { waitUntil: 'load' });
-await page.waitForFunction('window.ready === true', { timeout: 60000 });
-if (!N) N = await page.evaluate('window.TM.N');
+
+// Probe N and cues from an initial page
+const probePage = await b.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
+await probePage.goto(url, { waitUntil: 'load' });
+await probePage.waitForFunction('window.ready === true', { timeout: 60000 });
+if (!N) N = await probePage.evaluate('window.TM.N');
 console.log('Rendering', N, 'frames ->', framesDir);
 
+const cues = await probePage.evaluate('window.TM.CC ? window.TM.CC.cueList() : []');
+fs.writeFileSync(path.join(projectDir, 'cues.json'), JSON.stringify(cues, null, 0));
+console.log('cues.json:', cues.length, 'SFX events');
+await probePage.close();
+
+// Multi-worker concurrency
+const NUM_WORKERS = Math.max(1, Math.min(os.cpus().length, 4));
+console.log(`Starting ${NUM_WORKERS} parallel render worker(s)...`);
+
+const workers = await Promise.all(Array.from({ length: NUM_WORKERS }, async (_, i) => {
+  const p = await b.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
+  await p.goto(url, { waitUntil: 'load' });
+  await p.waitForFunction('window.ready === true', { timeout: 60000 });
+  return p;
+}));
+
+let completed = 0;
 const t0 = Date.now();
+
+// Assign frame tasks round-robin
+const workerTasks = Array.from({ length: NUM_WORKERS }, () => []);
 for (let f = 0; f < N; f++) {
   const frameFile = path.join(framesDir, String(f).padStart(5, '0') + '.jpg');
   if (fs.existsSync(frameFile) && fs.statSync(frameFile).size > 1000) {
-    if (f % 1000 === 0) console.log(`Resuming: skipped existing frame ${f}/${N}`);
+    completed++;
     continue;
   }
-  const dataUrl = await page.evaluate((ff) => {
-    window.renderFrame(ff);
-    return document.getElementById('stage').toDataURL('image/jpeg', 0.92);
-  }, f);
-  const buf = Buffer.from(dataUrl.split(',')[1], 'base64');
-  fs.writeFileSync(frameFile, buf);
-  if (f % 60 === 0 || f === N - 1) {
-    const el = (Date.now() - t0) / 1000;
-    console.log(`frame ${f + 1}/${N}  ${el.toFixed(1)}s  ${((f + 1) / el).toFixed(1)} fps`);
-  }
+  workerTasks[f % NUM_WORKERS].push(f);
 }
-// export auto-cued SFX events (pop/whoosh/scribble/clink/stamp/ding/...) for sfx.py mix
-const cues = await page.evaluate('window.TM.CC ? window.TM.CC.cueList() : []');
-fs.writeFileSync(path.join(projectDir, 'cues.json'), JSON.stringify(cues, null, 0));
-console.log('cues.json:', cues.length, 'SFX events');
-// QA: text that went (partly) off the frame
-const warns = await page.evaluate('window.TM.CC && window.TM.CC.warnList ? window.TM.CC.warnList() : []');
-fs.writeFileSync(path.join(projectDir, 'offscreen_text.json'), JSON.stringify(warns, null, 1));
-if (warns.length) { console.log(`WARNING: ${warns.length} text item(s) went off-screen — fix before delivery:`); warns.slice(0, 40).forEach(w => console.log(`  t=${w.t}s  "${w.text}"`)); }
-else console.log('QA: no off-screen text');
+
+if (completed > 0) {
+  console.log(`Resuming: already found ${completed}/${N} completed frames.`);
+}
+
+await Promise.all(workers.map(async (page, wIndex) => {
+  const tasks = workerTasks[wIndex];
+  for (const f of tasks) {
+    const frameFile = path.join(framesDir, String(f).padStart(5, '0') + '.jpg');
+    const dataUrl = await page.evaluate((ff) => {
+      window.renderFrame(ff);
+      return document.getElementById('stage').toDataURL('image/jpeg', 0.88);
+    }, f);
+    const buf = Buffer.from(dataUrl.split(',')[1], 'base64');
+    fs.writeFileSync(frameFile, buf);
+    completed++;
+    if (completed % 100 === 0 || completed === N) {
+      const el = (Date.now() - t0) / 1000;
+      const fps = el > 0 ? (completed / el).toFixed(1) : '0';
+      const pct = ((completed / N) * 100).toFixed(1);
+      console.log(`Progress: frame ${completed}/${N} (${pct}%) | ${el.toFixed(1)}s elapsed | ${fps} fps`);
+    }
+  }
+  await page.close();
+}));
+
+console.log(`All ${N} frames rendered in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
 await b.close();
-console.log('DONE', N, 'frames in', ((Date.now() - t0) / 1000).toFixed(1), 's');

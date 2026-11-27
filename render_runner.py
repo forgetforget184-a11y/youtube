@@ -16,24 +16,27 @@ def run_render(project_dir, voice_path, out_mp4, duration=None, music="auto", mu
         duration = float(duration)
 
     num_frames = round(duration * fps)
-    print(f"=== Rendering {duration:.2f}s ({num_frames} frames) at {fps} fps ===")
+    print(f"=== Rendering {duration:.2f}s ({num_frames} frames) at {fps} fps ===", flush=True)
 
     # 1. Render frames via render.mjs (resumes existing frames if present)
     frames_dir = os.path.join(project_dir, "frames")
     os.makedirs(frames_dir, exist_ok=True)
 
-    print("Step 1/4: Rendering Canvas2D frames...")
+    print("Step 1/4: Rendering Canvas2D frames in parallel...", flush=True)
     cmd_render = ["node", "render.mjs", project_dir, str(num_frames)]
-    res = subprocess.run(cmd_render, cwd=engine_dir, capture_output=True, text=True)
-    if res.returncode != 0:
-        print("Error in render.mjs:")
-        print(res.stderr)
-        print(res.stdout)
-        sys.exit(res.returncode)
-    print("Frames rendered successfully.")
+    
+    # Stream output in real time so GitHub Actions UI shows live progress
+    proc = subprocess.Popen(cmd_render, cwd=engine_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
+    for line in iter(proc.stdout.readline, ''):
+        print(line, end='', flush=True)
+    proc.wait()
+    if proc.returncode != 0:
+        print(f"Error: render.mjs exited with code {proc.returncode}", flush=True)
+        sys.exit(proc.returncode)
+    print("Frames rendered successfully.", flush=True)
 
     # 2. Audio mix: voice + SFX cues + music bed
-    print("Step 2/4: Mixing audio with sfx.py...")
+    print("Step 2/4: Mixing audio with sfx.py...", flush=True)
     mix_wav = os.path.join(project_dir, "work_mix.wav")
     cues_json = os.path.join(project_dir, "cues.json")
     cmd_mix = [
@@ -46,16 +49,16 @@ def run_render(project_dir, voice_path, out_mp4, duration=None, music="auto", mu
         "--music-level", str(music_level),
         "--out", mix_wav
     ]
-    res_mix = subprocess.run(cmd_mix, cwd=engine_dir, capture_output=True, text=True)
-    if res_mix.returncode != 0:
-        print("Error in sfx.py mix:")
-        print(res_mix.stderr)
-        print(res_mix.stdout)
-        sys.exit(res_mix.returncode)
-    print(res_mix.stdout.strip())
+    proc_mix = subprocess.Popen(cmd_mix, cwd=engine_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
+    for line in iter(proc_mix.stdout.readline, ''):
+        print(line, end='', flush=True)
+    proc_mix.wait()
+    if proc_mix.returncode != 0:
+        print(f"Error: sfx.py exited with code {proc_mix.returncode}", flush=True)
+        sys.exit(proc_mix.returncode)
 
     # 3. Audio Loudness Normalization
-    print("Step 3/4: Normalizing audio with ffmpeg...")
+    print("Step 3/4: Normalizing audio with ffmpeg...", flush=True)
     norm_wav = os.path.join(project_dir, "work_audio_norm.wav")
     cmd_norm = [
         "ffmpeg", "-v", "error", "-y",
@@ -68,7 +71,7 @@ def run_render(project_dir, voice_path, out_mp4, duration=None, music="auto", mu
     subprocess.check_call(cmd_norm)
 
     # 4. Video Muxing (H.264 + AAC)
-    print("Step 4/4: Muxing MP4 video...")
+    print("Step 4/4: Muxing MP4 video...", flush=True)
     frames_pattern = os.path.join(frames_dir, "%05d.jpg")
     os.makedirs(os.path.dirname(out_mp4), exist_ok=True)
     cmd_mux = [
@@ -84,18 +87,18 @@ def run_render(project_dir, voice_path, out_mp4, duration=None, music="auto", mu
         out_mp4
     ]
     subprocess.check_call(cmd_mux)
-    print(f"=== SUCCESS: WROTE {out_mp4} ===")
+    print(f"=== SUCCESS: WROTE {out_mp4} ===", flush=True)
 
     # Probe final output
     cmd_probe = ["ffprobe", "-v", "error", "-show_entries", "stream=codec_name,width,height,r_frame_rate:format=duration", "-of", "default=nw=1", out_mp4]
     probe_out = subprocess.check_output(cmd_probe, text=True)
-    print(probe_out.strip())
+    print(probe_out.strip(), flush=True)
 
     # Clean up frames directory after successful render to free up disk space
     if os.path.exists(out_mp4) and os.path.getsize(out_mp4) > 1000000:
-        print("Cleaning up frames directory to free disk space...")
+        print("Cleaning up frames directory to free disk space...", flush=True)
         shutil.rmtree(frames_dir, ignore_errors=True)
-        print("Frames directory cleaned up.")
+        print("Frames directory cleaned up.", flush=True)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
