@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+
+# Render cache & huge temporary frame files
+frames/
+*.log
+*.tmp
+*.exit
+work_mix.wav
+work_audio_norm.wav
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
