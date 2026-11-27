@@ -1,7 +1,8 @@
 /* ============================================================================
  * render.mjs — drive render.html headlessly with Playwright (SwiftShader) and
- * write frames/f%05d.jpg with parallel worker concurrency. Usage:
- *   node render.mjs <projectDir> <N>
+ * write frames/%05d.jpg with parallel worker concurrency & optional matrix sharding.
+ * Usage:
+ *   node render.mjs <projectDir> [N] [shardIndex] [numShards]
  * ==========================================================================*/
 import { chromium } from 'playwright-core';
 import fs from 'fs';
@@ -10,6 +11,9 @@ import os from 'os';
 
 const projectDir = path.resolve(process.argv[2] || '.');
 let N = process.argv[3] ? parseInt(process.argv[3], 10) : 0;
+const shardIndex = process.argv[4] !== undefined ? parseInt(process.argv[4], 10) : -1;
+const numShards = process.argv[5] !== undefined ? parseInt(process.argv[5], 10) : 1;
+
 const framesDir = path.join(projectDir, 'frames');
 fs.mkdirSync(framesDir, { recursive: true });
 
@@ -37,16 +41,19 @@ const probePage = await b.newPage({ viewport: { width: 1920, height: 1080 }, dev
 await probePage.goto(url, { waitUntil: 'load' });
 await probePage.waitForFunction('window.ready === true', { timeout: 60000 });
 if (!N) N = await probePage.evaluate('window.TM.N');
-console.log('Rendering', N, 'frames ->', framesDir);
 
-const cues = await probePage.evaluate('window.TM.CC ? window.TM.CC.cueList() : []');
-fs.writeFileSync(path.join(projectDir, 'cues.json'), JSON.stringify(cues, null, 0));
-console.log('cues.json:', cues.length, 'SFX events');
+const cuesPath = path.join(projectDir, 'cues.json');
+if (!fs.existsSync(cuesPath) || shardIndex <= 0) {
+  const cues = await probePage.evaluate('window.TM.CC ? window.TM.CC.cueList() : []');
+  fs.writeFileSync(cuesPath, JSON.stringify(cues, null, 0));
+  console.log('cues.json:', cues.length, 'SFX events');
+}
 await probePage.close();
 
 // Multi-worker concurrency (optimally matches vCPU cores to eliminate CPU throttling)
 const NUM_WORKERS = Math.max(1, Math.min(os.cpus().length, 2));
-console.log(`Starting ${NUM_WORKERS} parallel render worker(s)...`);
+const shardInfo = numShards > 1 ? ` (Shard ${shardIndex + 1}/${numShards})` : '';
+console.log(`Starting ${NUM_WORKERS} parallel render worker(s)${shardInfo}... Total N=${N}`);
 
 const workers = await Promise.all(Array.from({ length: NUM_WORKERS }, async (_, i) => {
   const p = await b.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
@@ -58,20 +65,29 @@ const workers = await Promise.all(Array.from({ length: NUM_WORKERS }, async (_, 
 let completed = 0;
 const t0 = Date.now();
 
-// Assign frame tasks round-robin
+// Assign frame tasks round-robin (respecting shard filter if set)
 const workerTasks = Array.from({ length: NUM_WORKERS }, () => []);
+let assignedCount = 0;
+
 for (let f = 0; f < N; f++) {
+  if (numShards > 1 && (f % numShards !== shardIndex)) {
+    continue; // Belongs to another shard runner
+  }
   const frameFile = path.join(framesDir, String(f).padStart(5, '0') + '.jpg');
   if (fs.existsSync(frameFile) && fs.statSync(frameFile).size > 1000) {
     completed++;
     continue;
   }
-  workerTasks[f % NUM_WORKERS].push(f);
+  workerTasks[assignedCount % NUM_WORKERS].push(f);
+  assignedCount++;
 }
 
+const totalForThisShard = assignedCount + completed;
 if (completed > 0) {
-  console.log(`Resuming: already found ${completed}/${N} completed frames.`);
+  console.log(`Resuming: already found ${completed}/${totalForThisShard} completed frames for this shard.`);
 }
+
+console.log(`Assigned ${assignedCount} frames across ${NUM_WORKERS} workers.`);
 
 await Promise.all(workers.map(async (page, wIndex) => {
   const tasks = workerTasks[wIndex];
@@ -84,15 +100,15 @@ await Promise.all(workers.map(async (page, wIndex) => {
     const buf = Buffer.from(dataUrl.split(',')[1], 'base64');
     fs.writeFileSync(frameFile, buf);
     completed++;
-    if (completed % 100 === 0 || completed === N) {
+    if (completed % 100 === 0 || completed === totalForThisShard) {
       const el = (Date.now() - t0) / 1000;
       const fps = el > 0 ? (completed / el).toFixed(1) : '0';
-      const pct = ((completed / N) * 100).toFixed(1);
-      console.log(`Progress: frame ${completed}/${N} (${pct}%) | ${el.toFixed(1)}s elapsed | ${fps} fps`);
+      const pct = totalForThisShard > 0 ? ((completed / totalForThisShard) * 100).toFixed(1) : '100';
+      console.log(`Progress: frame ${completed}/${totalForThisShard} (${pct}%) | ${el.toFixed(1)}s elapsed | ${fps} fps`);
     }
   }
   await page.close();
 }));
 
-console.log(`All ${N} frames rendered in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
+console.log(`Shard complete: ${completed}/${totalForThisShard} frames in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
 await b.close();
