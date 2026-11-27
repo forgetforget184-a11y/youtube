@@ -10,7 +10,7 @@ on:
       voice:
         description: 'TTS Voice (if generating voiceover via Edge-TTS)'
         required: true
-        default: 'en-US-GuyNeural'
+        default: 'en-US-ChristopherNeural'
       music_level:
         description: 'Music bed volume relative to voice (0.10 to 0.20)'
         required: true
