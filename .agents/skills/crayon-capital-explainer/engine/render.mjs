@@ -51,7 +51,7 @@ if (!fs.existsSync(cuesPath) || shardIndex <= 0) {
 await probePage.close();
 
 // Multi-worker concurrency (optimally matches vCPU cores to eliminate CPU throttling)
-const NUM_WORKERS = Math.max(1, Math.min(os.cpus().length, 2));
+const NUM_WORKERS = Math.max(1, Math.min(os.cpus().length, 4));
 const shardInfo = numShards > 1 ? ` (Shard ${shardIndex + 1}/${numShards})` : '';
 console.log(`Starting ${NUM_WORKERS} parallel render worker(s)${shardInfo}... Total N=${N}`);
 

@@ -28,13 +28,40 @@
     });
   };
   P.bank = function (ctx, x, y, o) {
-    o = o || {}; const col = o.col || PAL.cream;
+    o = o || {}; const col = o.col || '#EAE6DF', shade = o.shade || '#BCB5AA';
     at(ctx, x, y, o.s || 1, c => {
-      R(c, -240, -42, 480, 42, col, 5);
-      for (let i = 0; i < 5; i++) R(c, -200 + i * 90, -300, 46, 258, col, 5);
-      R(c, -225, -342, 450, 42, col, 5);
-      PO(c, [-262, -342, 0, -470, 262, -342], col, 5);
-      if (o.label) TX(c, o.label, 0, -386, 46, INK, { font: 'PMarker' });
+      // 3-step podium
+      R(c, -270, -22, 540, 22, col, 5);
+      R(c, -250, -42, 500, 22, col, 5);
+      R(c, -230, -62, 460, 22, col, 5);
+      // shadow under pediment architrave
+      R(c, -220, -325, 440, 16, shade, 0);
+      // 5 neoclassical columns with fluted shading
+      for (let i = 0; i < 5; i++) {
+        const cx = -180 + i * 90;
+        R(c, cx - 22, -310, 44, 250, col, 5);
+        // column side shade
+        c.fillStyle = shade;
+        c.fillRect(cx + 8, -310, 14, 250);
+        // capital and base
+        R(c, cx - 28, -320, 56, 12, col, 4);
+        R(c, cx - 28, -72, 56, 12, col, 4);
+      }
+      // frieze & architrave
+      R(c, -245, -350, 490, 40, col, 5);
+      // triangular pediment
+      PO(c, [-265, -350, 0, -475, 265, -350], col, 5);
+      // pediment inner shadow
+      PO(c, [-230, -355, 0, -460, 230, -355], shade, 0);
+      PO(c, [-215, -358, 0, -450, 215, -358], col, 0);
+      if (o.label) {
+        c.save();
+        c.font = 'bold 36px Georgia, "Times New Roman", serif';
+        c.textAlign = 'center'; c.textBaseline = 'middle';
+        c.fillStyle = 'rgba(0,0,0,0.4)'; c.fillText(o.label, 2, -328);
+        c.fillStyle = '#1A1A1A'; c.fillText(o.label, 0, -330);
+        c.restore();
+      }
     });
   };
   P.house = function (ctx, x, y, o) {

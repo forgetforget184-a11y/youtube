@@ -1,6 +1,6 @@
 import os, sys, subprocess, shutil, argparse
 
-def run_render(project_dir, voice_path, out_mp4, duration=None, music="auto", music_level=0.15, resolution="1080p", skip_frames=False):
+def run_render(project_dir, voice_path, out_mp4, duration=None, music="auto", music_level=0.06, resolution="1080p", skip_frames=False):
     project_dir = os.path.abspath(project_dir)
     voice_path = os.path.abspath(voice_path)
     out_mp4 = os.path.abspath(out_mp4)
@@ -120,7 +120,7 @@ if __name__ == "__main__":
     parser.add_argument("--out", required=True)
     parser.add_argument("--dur", type=float, default=None)
     parser.add_argument("--music", default="auto")
-    parser.add_argument("--music-level", type=float, default=0.15)
+    parser.add_argument("--music-level", type=float, default=0.06)
     parser.add_argument("--resolution", default="2160p", choices=["1080p", "2160p"])
     parser.add_argument("--skip-frames", action="store_true")
     args = parser.parse_args()

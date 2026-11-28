@@ -16,9 +16,9 @@ on:
         required: true
         default: '2160p'
       music_level:
-        description: 'Music bed volume relative to voice (0.10 to 0.20)'
+        description: 'Music bed volume relative to voice (0.05 to 0.10)'
         required: true
-        default: '0.15'
+        default: '0.06'
 
 permissions:
   contents: write

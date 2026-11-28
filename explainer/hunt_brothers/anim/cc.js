@@ -18,7 +18,7 @@
   CC.PAL = {
     sky: '#A9C5D5', skyLt: '#CFE0E8', tan: '#D8C3A0', tanDk: '#B9A27C', beige: '#E5D7BE', paper: '#F1EADB',
     grey: '#9A9EA3', greyDk: '#54585E', charcoal: '#2E3135', sage: '#A9B698', sageDk: '#7E8D6F', rose: '#C7A29C',
-    slate: '#7D8C99', slateDk: '#5C6A77', navy: '#2D3953', black: '#141414', white: '#FAF8F2', skin: '#FAF8F2',
+    slate: '#7D8C99', slateDk: '#5C6A77', navy: '#2D3953', black: '#141414', white: '#FAF8F2', skin: '#E0C4A8', skinLt: '#EBD0B2', skinDk: '#C8A484',
     red: '#C9473E', redLt: '#E07B70', blue: '#5A86B0', blueLt: '#A0C2DD', tear: '#5FB0EA', gold: '#E1B33C',
     green: '#6CA45A', greenDk: '#4A7E3E', money: '#93C47D', moneyDk: '#5A8E4D', brown: '#7A5838', brownLt: '#A27A52',
     purple: '#7C6596', orange: '#DF8A3D', yellow: '#F0C846', cream: '#F4EBD6', wood: '#9A6B43', water: '#6E9CB8'
@@ -594,9 +594,26 @@
       CC.line(ctx, [sx, SHY, e1[0], e1[1], e2[0], e2[1]], 10, ch.armCol || INK, null, false, 1.1);
       hands[side] = e2;
     }
-    // head (no neck: overlaps the shoulders)
+    // head (no neck: overlaps the shoulders) - shaded Crayon Capital vector style
     ctx.save(); ctx.translate(0, HCY);
-    CC.circle(ctx, 0, 0, HR, ch.skin, LW);
+    const skinCol = ch.skin || PAL.skin;
+    CC.circle(ctx, 0, 0, HR, skinCol, LW);
+    // soft ambient chin & jaw shade
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(0, 0, HR - 2.5, 0.18 * Math.PI, 0.82 * Math.PI);
+    ctx.lineWidth = 12;
+    ctx.strokeStyle = ch.skinDk || PAL.skinDk;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+    ctx.restore();
+    // subtle blush on cheeks
+    ctx.save();
+    ctx.globalAlpha = 0.28;
+    ctx.fillStyle = '#E89088';
+    ctx.beginPath(); ctx.arc(-HR * 0.48, HR * 0.15, HR * 0.16, 0, TAU); ctx.fill();
+    ctx.beginPath(); ctx.arc(HR * 0.48, HR * 0.15, HR * 0.16, 0, TAU); ctx.fill();
+    ctx.restore();
     if (st.fx && st.fx.flush && lq >= st.fx.flush.t0 && lq < st.fx.flush.until) {
       ctx.save(); ctx.globalAlpha = 0.42 * clamp((lq - st.fx.flush.t0) / 0.3, 0, 1); CC.draw(ctx, c => CC.pathEllipse(c, 0, 0, HR - 3, HR - 3, 1), PAL.red, 0); ctx.restore();
     }
@@ -623,6 +640,28 @@
   CC.toWorld = function (ctx, x, y) {
     const m = ctx.getTransform(); const inv = TM.camInv || new DOMMatrix();
     const p = inv.multiply(m).transformPoint(new DOMPoint(x, y)); return { x: p.x, y: p.y };
+  };
+
+  /* ------------------------------------------------------------------ cinematic lighting */
+  CC.spotlight = function (ctx, x, y, r, innerCol, outerCol) {
+    ctx.save();
+    const grad = ctx.createRadialGradient(x, y, 20, x, y, r || 650);
+    grad.addColorStop(0, innerCol || 'rgba(255, 248, 230, 0.22)');
+    grad.addColorStop(0.55, 'rgba(25, 28, 38, 0.55)');
+    grad.addColorStop(1, outerCol || 'rgba(12, 14, 20, 0.92)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+    ctx.restore();
+  };
+
+  CC.vignette = function (ctx, strength) {
+    ctx.save();
+    const grad = ctx.createRadialGradient(W / 2, H / 2, 280, W / 2, H / 2, 1050);
+    grad.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    grad.addColorStop(1, `rgba(5, 7, 12, ${strength || 0.72})`);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+    ctx.restore();
   };
 
   /* ------------------------------------------------------------------ bubbles */
